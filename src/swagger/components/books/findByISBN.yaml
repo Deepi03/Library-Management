@@ -1,0 +1,73 @@
+get:
+  tags:
+    - books
+  summary: Find a book by ISBN
+  description: Returns a single book
+  produces:
+    - "application/xml"
+    - "application/json"
+  parameters:
+    - name: "isbn"
+      in: "path"
+      description: "ISBN of book to return"
+      required: true
+      type: "string"
+  responses:
+    "200":
+      description: "successful operation"
+      schema:
+        $ref: "../schemas/BooksSchema.yaml"
+    "400":
+      description: "Invalid ISBN supplied"
+    "404":
+      description: "Book not found"
+put:
+  tags:
+    - "books"
+  summary: "Updates the borrowing details of book in the library with form data"
+  description: ""
+  consumes:
+    - "application/x-www-form-urlencoded"
+  produces:
+    - "application/xml"
+    - "application/json"
+  parameters:
+    - name: "isbn"
+      in: "path"
+      description: "ISBN of book that needs to be updated"
+      required: true
+      type: string
+    - name: "onLoan"
+      in: "formData"
+      description: "Updated loan status of a book. if true, the book is on loan"
+      required: true
+      type: boolean
+    - name: "borrowedDate"
+      in: "formData"
+      description: "the date the book is borrowed by the user"
+      required: false
+      type: integer
+      format: "date-time"
+    - name: "returnDate"
+      in: "formData"
+      description: "the date the book will be returned by the user"
+      required: false
+      type: integer
+      format: "date-time"
+    - name: "borrowerId"
+      in: "formData"
+      description: "Identifier for borrower"
+      required: false
+      type: integer
+      format: int64
+  responses:
+    "200":
+        description: "successful operation"
+        schema:
+          $ref: "../schemas/BooksSchema.yaml"
+    "405":
+      description: "Invalid input"
+  security:
+    - library_auth:
+        - "write:books"
+        - "read:books"

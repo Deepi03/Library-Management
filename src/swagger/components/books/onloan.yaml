@@ -1,0 +1,24 @@
+get:
+  tags:
+    - "books"
+  summary: "Finds Books by Borrowing status"
+  description: "Show which books are borrowed at the moment"
+  # operationId: "findPetsByStatus"
+  produces:
+    - "application/xml"
+    - "application/json"
+  parameters:
+    - name: "status"
+      in: "query"
+      description: "boolean value that holds the borrowing status flag"
+      required: true
+      type: "boolean"
+  responses:
+    "200":
+      description: "successful operation"
+      schema:
+        type: array
+        items:
+          $ref: "../schemas/BooksSchema.yaml"
+    "400":
+      description: "Invalid status value"

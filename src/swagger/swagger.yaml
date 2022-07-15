@@ -1,0 +1,61 @@
+swagger: "2.0"
+servers:
+  - description: SwaggerHub API
+    url: HTTP
+  - description: SwaggerHub API
+    url: HTTPS
+info:
+  description: This is a Library API
+  version: 1.0.0
+  title: Library API
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+
+tags:
+  - name: "books"
+    description: "All the books in this library"
+  - name: "user"
+    description: "Operations about the people who borrow the books"
+  - name: "admin"
+    description: "All the people who wrote the books in the library"
+
+paths:
+  /books:
+    $ref: "./components/books/books.yaml"
+  /books/findByISBN/{isbn}:
+    $ref: "./components/books/findByISBN.yaml"
+  /books/findByTitle/{title}:
+    $ref: "./components/books/findByTitle.yaml"
+  /books/onloan=1:
+    $ref: "./components/books/onloan.yaml"
+  /books/categories/{category}:
+    $ref: "./components/books/categories.yaml"
+  /user:
+    $ref: "./components/users/users.yaml"
+  /user/createWithArray:
+    $ref: "./components/users/createWithArray.yaml"
+  /user/createWithList:
+    $ref: "./components/users/createWithList.yaml"
+  /user/login:
+    $ref: "./components/users/login.yaml"      
+  /user/logout:
+    $ref: "./components/users/logout.yaml"
+  /user/{username}:
+    $ref: "./components/users/findByUsername.yaml"
+  /admin:
+    $ref: "./components/admin/admin.yaml"
+  /admin/book:
+    $ref: "./components/admin/book.yaml"
+  /admin/users:
+    $ref: "./components/admin/users.yaml"
+
+definitions:
+  Book:
+    $ref: "./components/schemas/BooksSchema.yaml"
+  User:
+    $ref: "./components/schemas/UsersSchema.yaml"
+securityDefinitions:
+  $ref: "./components/schemas/SecuritySchema.yaml"

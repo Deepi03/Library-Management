@@ -1,0 +1,66 @@
+get:
+  tags: 
+    - admin
+    - books
+  summary: get all the books in the library  
+  description: get all the books in the library
+  security:
+    BearerAuth: []
+  responses:
+    "200":
+      description: recieved all books data
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/UsersSchema.yaml"
+    "404":
+      description: resource not found 
+      content:
+        application/json:
+          schema:
+            $ref:""
+    "403": 
+      description: not loggedIn as admin 
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/UsersSchema.yaml" 
+post:
+  tags:
+    - admin
+    - books
+  summary: adds an book item
+  description: Adds an book to the system
+  security:
+    BearerAuth: []
+  responses:
+    "201":
+      description: item created
+    "400":
+      description: invalid input, object invalid
+put:
+  tags:
+    - admin
+  summary: update an existing book item
+  description: update an existing book in the system
+  security:
+    BearerAuth: []
+  responses:
+    "201":
+      description: item updated
+    "400":
+      description: invalid input, object invalid
+delete:
+  tags:
+    - admin
+  summary: delete an existing book item
+  description: delete an existing book in the system
+  security:
+    BearerAuth: []
+  responses:
+    "201":
+      description: item deleted
+    "400":
+      description: invalid input, object invalid
+    "404":
+      description:resource not found

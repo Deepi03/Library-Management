@@ -1,0 +1,24 @@
+type: object
+properties:
+  isbn:
+    type: string
+  title:
+    type: string
+  description:
+    type: string
+  category:
+    type: string
+  onLoan:
+    type: boolean
+    default: true
+  borrowedDate:
+    type: string
+    format: date-time
+  returnDate:
+    type: string
+    format: "date-time"
+  borrowerId:
+    type: "integer"
+    format: "int64"
+xml:
+  name: "Books"

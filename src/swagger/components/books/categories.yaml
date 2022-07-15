@@ -1,0 +1,24 @@
+/books/categories/{category}:
+    get:
+      tags:
+        - "books"
+      summary: "Search Books by category"
+      description: "sorts all books into corresponding categories and displays the queried category"
+      produces:
+        - "application/xml"
+        - "application/json"
+      parameters:
+        - name: "category"
+          in: "path"
+          description: "category the book belongs to"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "../schemas/BooksSchema.yaml"
+        "400":
+          description: "Invalid category"
