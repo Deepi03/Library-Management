@@ -1,0 +1,27 @@
+
+    get:
+      tags:
+        - "authors"
+      summary: Get a single author
+      description: Get a single author by adding id as a parameter
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - name: authorId
+          in: "path"
+          description: author id 
+          required: true
+          type: string
+      responses:
+        "200":
+          description: success 
+          schema:
+            type: array
+            items:
+              $ref: ../schemas/AuthorsSchema.yaml
+        "400":
+          description: Invalid
+    
+
+

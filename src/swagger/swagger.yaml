@@ -19,7 +19,7 @@ tags:
     description: "All the books in this library"
   - name: "user"
     description: "Operations about the people who borrow the books"
-  - name: "admin"
+  - name: "author"
     description: "All the people who wrote the books in the library"
 
 paths:
@@ -45,17 +45,19 @@ paths:
     $ref: "./components/users/logout.yaml"
   /user/{username}:
     $ref: "./components/users/findByUsername.yaml"
-  /admin:
-    $ref: "./components/admin/admin.yaml"
-  /admin/book:
-    $ref: "./components/admin/book.yaml"
-  /admin/users:
-    $ref: "./components/admin/users.yaml"
+  /authors:
+    $ref: "./components/authors/authors.yaml"
+  /authors/{authorId}:
+    $ref: "./components/authors/singleAuthor.yaml"
+  /authors/{authorId}/books:
+    $ref: "./components/authors/getAllBooksByAuthor.yaml"
 
 definitions:
   Book:
     $ref: "./components/schemas/BooksSchema.yaml"
   User:
     $ref: "./components/schemas/UsersSchema.yaml"
+  Author:
+    $ref: "./components/schemas/AuthorsSchema.yaml"
 securityDefinitions:
   $ref: "./components/schemas/SecuritySchema.yaml"

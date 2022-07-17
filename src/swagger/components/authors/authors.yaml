@@ -1,0 +1,65 @@
+get:
+  tags:
+    - authors 
+  summary: Shows all the authors
+  description: 
+    Returns a list of all the authors in the library
+  produces:
+    - "application/xml"
+    - "application/json"
+  responses:
+    "200":
+      description: success
+      type: array
+      schema:
+        $ref: "../schemas/AuthorsSchema.yaml"
+    "400":
+      description: could not display authors
+
+post:
+  tags:
+    - authors
+  summary: Create a new author
+  description: 
+    Create a new author by sending an object 
+  produces:
+    - "application/xml"
+    - "application/json"
+  responses:
+    "200":
+      description: success
+      schema:
+        $ref: "../schemas/AuthorsSchema.yaml"
+    "400" :
+      description: Error in submission
+
+put:
+  tags:
+    - "authors"
+  summary: Update an existing author
+  description:
+    Update an existing author by sending an object
+  produces:
+    - "application/xml"
+    - "aplication/json"
+  responses:
+    "200":
+      description: success
+      schema: 
+        $ref: "../schemas/AuthorsSchema.yaml"
+    "400":
+      decription: Error in submission
+delete:
+      tags:
+        - authors
+      summary: Delete an existing author
+      description:
+        Delete an existing author 
+      responses:
+        "200":
+          description: success
+          schema:
+          $ref: "../schemas/AuthorsSchema.yaml"
+
+        
+ 
