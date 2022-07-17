@@ -1,6 +1,6 @@
 get:
   tags:
-    - "user"
+    - "users"
   summary: "Logs user into the system"
   description: ""
   operationId: "loginUser"

@@ -1,6 +1,6 @@
 post:
   tags:
-    - "user"
+    - "users"
   summary: "Creates list of users with given input array"
   description: ""
   operationId: "createUsersWithListInput"

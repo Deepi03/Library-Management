@@ -16,9 +16,9 @@ info:
 tags:
   - name: books
     description: All the books in this library
-  - name: user
+  - name: users
     description: Operations about the people who borrow the books
-  - name: admin
+  - name: authors
     description: All the people who wrote the books in the library
 paths:
   /books:
@@ -137,7 +137,7 @@ paths:
                 $ref: '#/definitions/Book'
           '400':
             description: Invalid book title
-  /books/onloan=1:
+  /books/onloan:
     get:
       tags:
         - books
@@ -186,10 +186,10 @@ paths:
                 $ref: '#/definitions/Book'
           '400':
             description: Invalid category
-  /user:
+  /users:
     post:
       tags:
-        - user
+        - users
       summary: Create user
       description: This can only be done by the logged in user.
       operationId: createUser
@@ -206,10 +206,10 @@ paths:
       responses:
         default:
           description: successful operation
-  /user/createWithArray:
+  /users/createWithArray:
     post:
       tags:
-        - user
+        - users
       summary: Create user
       description: This can only be done by the logged in user.
       operationId: createUser
@@ -226,10 +226,10 @@ paths:
       responses:
         default:
           description: successful operation
-  /user/createWithList:
+  /users/createWithList:
     post:
       tags:
-        - user
+        - users
       summary: Creates list of users with given input array
       description: ''
       operationId: createUsersWithListInput
@@ -248,10 +248,10 @@ paths:
       responses:
         default:
           description: successful operation
-  /user/login:
+  /users/login:
     get:
       tags:
-        - user
+        - users
       summary: Logs user into the system
       description: ''
       operationId: loginUser
@@ -285,10 +285,10 @@ paths:
               description: date in UTC when token expires
         '400':
           description: Invalid username/password supplied
-  /user/logout:
+  /users/logout:
     get:
       tags:
-        - user
+        - users
       summary: Logs out current logged in user session
       description: ''
       operationId: logoutUser
@@ -299,10 +299,10 @@ paths:
       responses:
         default:
           description: successful operation
-  '/user/{username}':
+  '/users/{username}':
     get:
       tags:
-        - user
+        - users
       summary: Get user by user name
       description: ''
       operationId: getUserByName
@@ -326,7 +326,7 @@ paths:
           description: User not found
     put:
       tags:
-        - user
+        - users
       summary: Updated user
       description: This can only be done by the logged in user.
       operationId: updateUser
@@ -352,7 +352,7 @@ paths:
           description: User not found
     delete:
       tags:
-        - user
+        - users
       summary: Delete user
       description: This can only be done by the logged in user.
       operationId: deleteUser
@@ -370,152 +370,111 @@ paths:
           description: Invalid username supplied
         '404':
           description: User not found
-  /admin:
+  /authors:
     get:
       tags:
-        - admin
-      summary: 'get admin information and right to add ,update and delete books  and users from library'
-      description: |
-        If loggedIn as admin can adda,update,delete books and users from library
-      security:
-        BearerAuth: []
+        - authors
+      summary: Shows all the authors
+      description: Returns a list of all the authors in the library
+      produces:
+        - application/xml
+        - application/json
       responses:
         '200':
-          description: loggedIn as admin
-          content:
-            application/json:
-              schema:
-                $ref: '#/definitions/User'
-        '403':
-          description: not admin userId
-  /admin/book:
-    get:
-      tags:
-        - admin
-        - books
-      summary: get all the books in the library
-      description: get all the books in the library
-      security:
-        BearerAuth: []
-      responses:
-        '200':
-          description: recieved all books data
-          content:
-            application/json:
-              schema:
-                $ref: '#/definitions/User'
-        '403':
-          description: not loggedIn as admin
-          content:
-            application/json:
-              schema:
-                $ref: '#/definitions/User'
-        '404':
-          description: resource not found
-          content:
-            application/json:
-              schema: '$ref:""'
+          description: success
+          type: array
+          schema:
+            $ref: '#/definitions/Author'
+        '400':
+          description: could not display authors
     post:
       tags:
-        - admin
-        - books
-      summary: adds an book item
-      description: Adds an book to the system
-      security:
-        BearerAuth: []
-      responses:
-        '201':
-          description: item created
-        '400':
-          description: 'invalid input, object invalid'
-    put:
-      tags:
-        - admin
-      summary: update an existing book item
-      description: update an existing book in the system
-      security:
-        BearerAuth: []
-      responses:
-        '201':
-          description: item updated
-        '400':
-          description: 'invalid input, object invalid'
-    delete:
-      tags:
-        - admin
-      summary: delete an existing book item
-      description: delete an existing book in the system
-      security:
-        BearerAuth: []
-      responses:
-        '201':
-          description: item deleted
-        '400':
-          description: 'invalid input, object invalid'
-        '404': 'description:resource not found'
-  /admin/users:
-    get:
-      tags:
-        - admin
-      summary: get all the users
-      description: get all the users in the library
-      security:
-        BearerAuth: []
+        - authors
+      summary: Create a new author
+      description: Create a new author by sending an object
+      produces:
+        - application/xml
+        - application/json
       responses:
         '200':
-          description: recieved all users data
-          content:
-            application/json:
-              schema:
-                $ref: '#/definitions/User'
-        '403': not loggedIn as admin
-        '404':
-          description: resource not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/definitions/User'
-        content:
-          application/json:
-            schema:
-              $ref: '#/definitions/User'
-    post:
-      tags:
-        - admin
-      summary: adds an book item
-      description: Adds an book to the system
-      security:
-        BearerAuth: []
-      responses:
-        '201':
-          description: item created
+          description: success
+          schema:
+            $ref: '#/definitions/Author'
         '400':
-          description: 'invalid input, object invalid'
+          description: Error in submission
     put:
       tags:
-        - admin
-      summary: update an existing book item
-      description: update an existing book in the system
-      security:
-        BearerAuth: []
+        - authors
+      summary: Update an existing author
+      description: Update an existing author by sending an object
+      produces:
+        - application/xml
+        - aplication/json
       responses:
-        '201':
-          description: item updated
+        '200':
+          description: success
+          schema:
+            $ref: '#/definitions/Author'
         '400':
-          description: 'invalid input, object invalid'
+          decription: Error in submission
     delete:
       tags:
-        - admin
-      summary: delete an existing book item
-      description: delete an existing book in the system
-      security:
-        BearerAuth: []
+        - authors
+      summary: Delete an existing author
+      description: Delete an existing author
       responses:
-        '201':
-          description: item deleted
+        '200':
+          description: success
+          schema: null
+          $ref: '#/definitions/Author'
+  '/authors/{authorId}':
+    get:
+      tags:
+        - authors
+      summary: Get a single author
+      description: Get a single author by adding id as a parameter
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - name: authorId
+          in: path
+          description: author id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Author'
         '400':
-          description: 'invalid input, object invalid'
-        '404': 'description:resource not found'
+          description: Invalid
+  '/authors/{authorId}/books':
+    get:
+      tags:
+        - authors
+      summary: Get all books by author
+      description: Get all books by author by adding author id as a parameter
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - name: authorId
+          in: path
+          description: author id
+          required: true
+          type: string
+    responses:
+      '200':
+        description: success
+        schema:
+          type: array
+          items:
+            $ref: '#/definitions/Author'
+      '400':
+        description: Invalid
 definitions:
   Book:
     type: object
@@ -566,6 +525,13 @@ definitions:
         description: User Status
     xml:
       name: User
+  Author:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
 securityDefinitions:
   BasicAuth:
     type: http

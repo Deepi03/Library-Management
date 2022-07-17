@@ -1,6 +1,22 @@
+get:
+  tags:
+    - users
+  summary: Shows all the users
+  description: Returns a list of all the users in the library
+  produces:
+    - "application/xml"
+    - "application/json"
+  responses:
+    "200":
+      description: "successful operation"
+      type: array
+      schema:
+        $ref: "../schemas/UsersSchema.yaml"
+    "400":
+      description: "could not display users"
 post:
   tags:
-    - "user"
+    - users
   summary: "Create user"
   description: "This can only be done by the logged in user."
   operationId: "createUser"
