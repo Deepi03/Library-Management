@@ -35,7 +35,7 @@ post:
 
 put:
   tags:
-    - "authors"
+    - authors
   summary: Update an existing author
   description:
     Update an existing author by sending an object

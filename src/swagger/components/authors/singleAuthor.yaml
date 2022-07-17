@@ -1,7 +1,7 @@
 
     get:
       tags:
-        - "authors"
+        - authors
       summary: Get a single author
       description: Get a single author by adding id as a parameter
       produces:

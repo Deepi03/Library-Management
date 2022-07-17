@@ -16,9 +16,9 @@ info:
 tags:
   - name: books
     description: All the books in this library
-  - name: user
+  - name: users
     description: Operations about the people who borrow the books
-  - name: author
+  - name: authors
     description: All the people who wrote the books in the library
 paths:
   /books:
@@ -137,7 +137,7 @@ paths:
                 $ref: '#/definitions/Book'
           '400':
             description: Invalid book title
-  /books/onloan=1:
+  /books/onloan:
     get:
       tags:
         - books
@@ -186,10 +186,10 @@ paths:
                 $ref: '#/definitions/Book'
           '400':
             description: Invalid category
-  /user:
+  /users:
     post:
       tags:
-        - user
+        - users
       summary: Create user
       description: This can only be done by the logged in user.
       operationId: createUser
@@ -206,10 +206,10 @@ paths:
       responses:
         default:
           description: successful operation
-  /user/createWithArray:
+  /users/createWithArray:
     post:
       tags:
-        - user
+        - users
       summary: Create user
       description: This can only be done by the logged in user.
       operationId: createUser
@@ -226,10 +226,10 @@ paths:
       responses:
         default:
           description: successful operation
-  /user/createWithList:
+  /users/createWithList:
     post:
       tags:
-        - user
+        - users
       summary: Creates list of users with given input array
       description: ''
       operationId: createUsersWithListInput
@@ -248,10 +248,10 @@ paths:
       responses:
         default:
           description: successful operation
-  /user/login:
+  /users/login:
     get:
       tags:
-        - user
+        - users
       summary: Logs user into the system
       description: ''
       operationId: loginUser
@@ -285,10 +285,10 @@ paths:
               description: date in UTC when token expires
         '400':
           description: Invalid username/password supplied
-  /user/logout:
+  /users/logout:
     get:
       tags:
-        - user
+        - users
       summary: Logs out current logged in user session
       description: ''
       operationId: logoutUser
@@ -299,10 +299,10 @@ paths:
       responses:
         default:
           description: successful operation
-  '/user/{username}':
+  '/users/{username}':
     get:
       tags:
-        - user
+        - users
       summary: Get user by user name
       description: ''
       operationId: getUserByName
@@ -326,7 +326,7 @@ paths:
           description: User not found
     put:
       tags:
-        - user
+        - users
       summary: Updated user
       description: This can only be done by the logged in user.
       operationId: updateUser
@@ -352,7 +352,7 @@ paths:
           description: User not found
     delete:
       tags:
-        - user
+        - users
       summary: Delete user
       description: This can only be done by the logged in user.
       operationId: deleteUser

@@ -1,6 +1,6 @@
 get:
   tags:
-    - "user"
+    - "users"
   summary: "Get user by user name"
   description: ""
   operationId: "getUserByName"
@@ -24,7 +24,7 @@ get:
       description: "User not found"
 put:
   tags:
-    - "user"
+    - "users"
   summary: "Updated user"
   description: "This can only be done by the logged in user."
   operationId: "updateUser"
@@ -50,7 +50,7 @@ put:
       description: "User not found"
 delete:
   tags:
-    - "user"
+    - "users"
   summary: "Delete user"
   description: "This can only be done by the logged in user."
   operationId: "deleteUser"

@@ -17,9 +17,9 @@ info:
 tags:
   - name: "books"
     description: "All the books in this library"
-  - name: "user"
+  - name: "users"
     description: "Operations about the people who borrow the books"
-  - name: "author"
+  - name: "authors"
     description: "All the people who wrote the books in the library"
 
 paths:
@@ -29,21 +29,21 @@ paths:
     $ref: "./components/books/findByISBN.yaml"
   /books/findByTitle/{title}:
     $ref: "./components/books/findByTitle.yaml"
-  /books/onloan=1:
+  /books/onloan:
     $ref: "./components/books/onloan.yaml"
   /books/categories/{category}:
     $ref: "./components/books/categories.yaml"
-  /user:
+  /users:
     $ref: "./components/users/users.yaml"
-  /user/createWithArray:
+  /users/createWithArray:
     $ref: "./components/users/createWithArray.yaml"
-  /user/createWithList:
+  /users/createWithList:
     $ref: "./components/users/createWithList.yaml"
-  /user/login:
+  /users/login:
     $ref: "./components/users/login.yaml"      
-  /user/logout:
+  /users/logout:
     $ref: "./components/users/logout.yaml"
-  /user/{username}:
+  /users/{username}:
     $ref: "./components/users/findByUsername.yaml"
   /authors:
     $ref: "./components/authors/authors.yaml"

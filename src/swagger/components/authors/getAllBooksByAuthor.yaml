@@ -1,7 +1,7 @@
 
     get:
       tags:
-        - "authors"
+        - authors
       summary: Get all books by author
       description: Get all books by author by adding author id as a parameter
       produces: 
