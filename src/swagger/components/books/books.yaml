@@ -14,5 +14,3 @@ get:
         $ref: "../schemas/BooksSchema.yaml"
     "400":
       description: "could not display books"
-
-
