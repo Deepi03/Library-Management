@@ -9,6 +9,7 @@ import authorsRoute from './routes/authorsRoute';
 import booksRoute from './routes/booksRoute';
 import homeRoute from './routes/homeRoute';
 import usersRoute from './routes/usersRoute';
+import { errorHandler } from './errorHandler/error';
 
 const app = express()
 app.set('port', 8080)
@@ -51,5 +52,7 @@ app.get('/about', (req: Request, res: Response) => {
 app.use('/api', swaggerUi.serve, swaggerUi.setup(swaggerDocument, {
     explorer: true
 }))
+
+app.use(errorHandler)
 
 export default app
