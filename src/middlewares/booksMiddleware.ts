@@ -19,6 +19,11 @@ const checkCategory = (req: Request, res: Response, next : NextFunction)=>{
 }
 
 export default {
+<<<<<<< Updated upstream
     upperTitle,
     checkCategory
+=======
+    checkCategory,
+    upperTitle
+>>>>>>> Stashed changes
 }
