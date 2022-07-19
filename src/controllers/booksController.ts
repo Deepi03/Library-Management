@@ -1,24 +1,24 @@
 import { Request, Response } from "express"
 
-export const getAllBooks = (req: Request, res: Response) => {
+const getAllBooks = (req: Request, res: Response) => {
     return res.send({
         message: `You are at the BOOKS endpoint via ::booksController/getAllBooks`,
         status: 200
     })
 }
 
-export const putBooks = (req: Request, res: Response) => {
+const putBooks = (req: Request, res: Response) => {
     return res.send(JSON.stringify(req.body))
 }
 
-export const getBooksAllCategories = (req: Request, res: Response) => {
+const getBooksAllCategories = (req: Request, res: Response) => {
     res.send({
         message: 'You are at the books/categories endpoint. Here you will view books of ALL CATEGORIES',
         status: 200
     })
 }
 
-export const getBooksByCategory = (req: Request, res: Response) => {
+const getBooksByCategory = (req: Request, res: Response) => {
     const category = req.params.category
     return res.send({
         category: category,
@@ -27,7 +27,7 @@ export const getBooksByCategory = (req: Request, res: Response) => {
     })
 }
 
-export const getBookByISBN = (req: Request, res: Response) => { 
+const getBookByISBN = (req: Request, res: Response) => {
     const isbn = req.params.isbn
     return res.send({
         isbn: isbn,
@@ -36,7 +36,7 @@ export const getBookByISBN = (req: Request, res: Response) => {
     })
 }
 
-export const getBookByTitle = (req: Request, res: Response) => { 
+const getBookByTitle = (req: Request, res: Response) => {
     return res.send({
         bookTitle: req.params.title,
         message: `You are trying to find a book by Title. ::booksController/getBookByTitle`,
@@ -44,9 +44,19 @@ export const getBookByTitle = (req: Request, res: Response) => {
     })
 }
 
-export const getBooksOnLoan = (req: Request, res: Response) => { 
+const getBooksOnLoan = (req: Request, res: Response) => {
     return res.send({
         message: `This endpoint will show all the books that are currently on loan ::booksController/getBooksOnLoan`,
         status: 200
     })
+}
+
+export default { 
+    getAllBooks,
+    putBooks, 
+    getBooksAllCategories,
+    getBooksByCategory,
+    getBookByISBN,
+    getBookByTitle,
+    getBooksOnLoan 
 }
