@@ -4,11 +4,15 @@ import Book from "../models/Book"
 import { CustomError } from "../types/customError"
 import bookService from "../services/bookService"
 
-const getAllBooks = (req: Request, res: Response) => {
-    return res.send({
-        message: `You are at the BOOKS endpoint via ::booksController/getAllBooks`,
-        status: 200
-    })
+const getAllBooks = async (req: Request, res: Response) => {
+    const allBooks = await bookService.getAllBooks()
+    return res.json(allBooks)
+}
+
+const getBookByISBN = async (req: Request, res: Response) => {
+    const ISBN  = req.params.isbn
+    const foundBook = await bookService.getBookByISBN(ISBN)
+    return res.json(foundBook)
 }
 
 const putBooks = (req: Request, res: Response) => {
@@ -31,14 +35,6 @@ const getBooksByCategory = (req: Request, res: Response) => {
     })
 }
 
-const getBookByISBN = (req: Request, res: Response) => {
-    const isbn = req.params.isbn
-    return res.send({
-        isbn: isbn,
-        message: `You are trying to find a book using ISBN possibly with a barcode-scanner. ::booksController/getBookByISBN`,
-        status: 200
-    })
-}
 
 const getBookByTitle = (req: Request, res: Response) => {
     return res.send({
@@ -84,7 +80,7 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
 
 const deleteBook = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { ISBN } = req.params
+        const ISBN  = req.params.isbn
         await bookService.deleteBook(ISBN)
         return res.status(204).send('All copies of the Book deleted')
     } catch (e) {
@@ -94,7 +90,7 @@ const deleteBook = async (req: Request, res: Response, next: NextFunction) => {
 
 const deleteSingleCopy = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { bookId } = req.body.bookId
+        const bookId = req.body.bookId
         await bookService.deleteSingleCopy(bookId)
         return res.status(204).send('Book deleted')
     } catch (e) {
