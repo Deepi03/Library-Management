@@ -15,40 +15,34 @@ const getBookByISBN = async (req: Request, res: Response) => {
     return res.json(foundBook)
 }
 
-const putBooks = (req: Request, res: Response) => {
-    return res.send(JSON.stringify(req.body))
+const getBooksByCategory = async (req: Request, res: Response) => {
+    try {
+        const category = res.locals.category
+        const foundBooks = await bookService.getBooksByCategory(category)
+        return res.json(foundBooks)
+    } catch (e) {
+        return res.send(e)
+    }
 }
 
-const getBooksAllCategories = (req: Request, res: Response) => {
-    res.send({
-        message: 'You are at the books/categories endpoint. Here you will view books of ALL CATEGORIES',
-        status: 200
-    })
+const getBookByTitle = async(req: Request, res: Response) => {
+    try {
+        const title = res.locals.bookTitle
+        const foundBooks = await bookService.getBookByTitle(title)
+        return res.json(foundBooks)
+    } catch (error) {
+        return res.send(error)
+    }
 }
 
-const getBooksByCategory = (req: Request, res: Response) => {
-    const category = req.params.category
-    return res.send({
-        category: category,
-        message: `You are accessing the endpoint to get all books FROM CATEGORY: ${category}`,
-        status: 200
-    })
-}
-
-
-const getBookByTitle = (req: Request, res: Response) => {
-    return res.send({
-        bookTitle: req.params.title,
-        message: `You are trying to find a book by Title. ::booksController/getBookByTitle`,
-        status: 200
-    })
-}
-
-const getBooksOnLoan = (req: Request, res: Response) => {
-    return res.send({
-        message: `This endpoint will show all the books that are currently on loan ::booksController/getBooksOnLoan`,
-        status: 200
-    })
+const getBooksOnLoan = async (req: Request, res: Response) => {
+    try {
+        // const onLoan  = (req.params.onLoan === 'true')
+        const foundBooks = await bookService.getBooksOnLoan()
+        return res.json(foundBooks)
+    } catch (error) {
+        return res.send(error)
+    }
 }
 
 const createBook = async (req: Request, res: Response, next: NextFunction) => {
@@ -90,7 +84,8 @@ const deleteBook = async (req: Request, res: Response, next: NextFunction) => {
 
 const deleteSingleCopy = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const bookId = req.body.bookId
+        const bookId = req.params.bookId
+        console.log(bookId)
         await bookService.deleteSingleCopy(bookId)
         return res.status(204).send('Book deleted')
     } catch (e) {
@@ -100,8 +95,6 @@ const deleteSingleCopy = async (req: Request, res: Response, next: NextFunction)
 
 export default {
     getAllBooks,
-    putBooks,
-    getBooksAllCategories,
     getBooksByCategory,
     getBookByISBN,
     getBookByTitle,

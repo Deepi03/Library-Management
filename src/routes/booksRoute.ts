@@ -6,15 +6,14 @@ import booksMiddleware from "../middlewares/booksMiddleware"
 const booksRoute = Router()
 
 booksRoute.get('', booksController.getAllBooks)
-booksRoute.put('', booksController.putBooks)
-booksRoute.get('/categories', booksController.getBooksAllCategories)
+// booksRoute.get('/categories', booksController.getAllCategories)
 booksRoute.get('/categories/:category', booksMiddleware.checkCategory, booksController.getBooksByCategory)
 booksRoute.get('/findByISBN/:isbn', booksController.getBookByISBN)
-booksRoute.get('/findByTitle/:title', booksMiddleware.upperTitle, booksController.getBookByTitle)
+booksRoute.get('/findByTitle/:title', booksMiddleware.removeHyphens, booksController.getBookByTitle)
 booksRoute.get('/onLoan', booksController.getBooksOnLoan)
 
 booksRoute.post('', booksController.createBook)
-booksRoute.delete('/:isbn', booksController.deleteBook)
-booksRoute.delete('/:bookId', booksController.deleteSingleCopy)
+booksRoute.delete('/deleteBook/:isbn', booksController.deleteBook)
+booksRoute.delete('/deleteCopy/:bookId', booksController.deleteSingleCopy)
 
 export default booksRoute

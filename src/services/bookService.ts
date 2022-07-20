@@ -5,11 +5,33 @@ const getAllBooks = async () => {
     return await Book.find()
 }
 
-const getBookByISBN = async(ISBN: string) => {
-    return await Book.find({ isbn:ISBN })
+const getBookByISBN = async (ISBN: string) => {
+    return await Book.find({ isbn: ISBN })
 }
 
-const createNewBook = async(book: BookDocument) => {
+const getBooksByCategory = async (category: number) => {
+    return await Book.find({ category: category })
+}
+
+const getBooksOnLoan = async() => {
+    return await Book.find({onLoan:true})
+}
+
+const getBookByTitle = async (bookTitle: string) => {
+    return await Book.find({
+        '$search': {
+            'index': 'booksIndex',
+            'text': {
+                'query': bookTitle,
+                'path': {
+                    'wildcard': '*'
+                }
+            }
+        }
+    })
+}
+
+const createNewBook = async (book: BookDocument) => {
     return await book.save()
 }
 
@@ -33,9 +55,12 @@ const deleteSingleCopy = async (bookId: string) => {
     }
 }
 
-export default{
+export default {
     getAllBooks,
     getBookByISBN,
+    getBooksByCategory,
+    getBooksOnLoan,
+    getBookByTitle,
     createNewBook,
     deleteBook,
     deleteSingleCopy
