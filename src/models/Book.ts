@@ -1,13 +1,12 @@
-import mongoose, { Document, Schema } from "mongoose"
-
-// export type UserRole = 'admin' | 'guest'
+import mongoose, { Document, Schema, ObjectId } from "mongoose"
 
 export interface BookDocument extends Document{
     isbn: string,
     title: string,
     description: string,
     category: number,
-    onLoan: boolean
+    onLoan: boolean,
+    authors: ObjectId[]
 }
 
 const bookSchema = new Schema<BookDocument>({
@@ -30,7 +29,13 @@ const bookSchema = new Schema<BookDocument>({
     onLoan: {
         type: Boolean,
         required: true
-    }
+    },
+    authors: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Author'
+        }
+    ]
 })
 
 const Book = mongoose.model<BookDocument>('Book', bookSchema)

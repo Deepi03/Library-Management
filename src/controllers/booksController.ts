@@ -52,7 +52,8 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
             title,
             description,
             category,
-            onLoan
+            onLoan,
+            authors
         } = req.body
 
         const book = new Book({
@@ -60,7 +61,8 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
             title,
             description,
             category,
-            onLoan
+            onLoan,
+            authors
         })
 
         // const newBook = await book.save()
