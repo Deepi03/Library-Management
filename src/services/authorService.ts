@@ -14,8 +14,7 @@ const getSingleAuthor = async (authorId: string) => {
     }
     return foundAuthor;
   } catch (e) {
-    console.log(e);
-    return;
+    return e;
   }
 };
 const createAuthor = async (author: AuthorDocument) => {

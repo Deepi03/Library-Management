@@ -29,7 +29,7 @@ const createAuthor = async(req: Request, res: Response,next: NextFunction) => {
       const data = await sharp(dataBuffer).resize(200,200).toBuffer()
       const savedImage = await imageService.createImage(data)
       const avatar = `http://localhost:8080/authorImages/${savedImage._id}`
-      const { firstname,lastname } = req.body;
+      const { firstname,lastname,books } = req.body;
       const author = new Author({
           firstname,
           lastname,
@@ -38,7 +38,7 @@ const createAuthor = async(req: Request, res: Response,next: NextFunction) => {
       const newAuthor = await authorService.createAuthor(author)
       return res.status(201).json(newAuthor);
       } else {
-            throw new CustomError(404, 'File acannot be empty')
+            throw new CustomError(404, 'File cannot be empty')
         }
   }
   catch (e) {
@@ -54,13 +54,13 @@ const updateAuthor = async(req:Request,res:Response,next:NextFunction) =>{
       const data = await sharp(dataBuffer).resize(200,200).toBuffer()
       const savedImage = await imageService.createImage(data)
       const avatar = `http://localhost:8080/authorImages/${savedImage._id}`
-      const { firstname,lastname } = req.body;
+      const { firstname,lastname,books } = req.body;
       const author = new Author(
         {
            _id : authorId,
           firstname : firstname,
           lastname:lastname,
-          avatar: avatar
+          avatar: avatar,
         }
       );
      
