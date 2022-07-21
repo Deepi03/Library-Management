@@ -5,8 +5,12 @@ import usersController  from "../controllers/usersController"
 const usersRoute = Router()
 
 usersRoute.get('', usersController.getAllUsers)
-usersRoute.get('/:userId', usersMiddleware.checkUserId, usersController.getUserById)
-usersRoute.get('/:username', usersController.getUserById) //will we be working with username???
-usersRoute.post('', usersController.postUser)
+usersRoute.get('/:userId', usersMiddleware.checkUserId, usersController.getSingleUser)
+usersRoute.get('/:username', usersMiddleware.checkUserId, usersController.getUserByUsername)
+usersRoute.get('/:email', usersController.getUserByEmail)
+usersRoute.delete('/:userId', usersController.deleteUserByUserId)
+usersRoute.delete('/:email', usersController.deleteUserByEmail)
+usersRoute.delete('/:username', usersController.deleteUserByUsername)
+usersRoute.post('', usersController.createUser)
 
 export default usersRoute
