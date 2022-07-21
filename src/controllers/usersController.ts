@@ -9,19 +9,11 @@ import { CustomError } from "../types/CustomError";
 
 const getAllUsers = async (req: Request, res: Response) => {
   const users = await userService.getAllUsers();
-  res.send({
-    message: "You are at the USERS endpoint via ::usersRoute",
-    status: 200,
-  });
   return res.json(users);
 };
 
 const getSingleUser = async (req: Request, res: Response) => {
   const userId = req.params.userId;
-  res.send({
-    message: `You are at viewing the details of User by ID: ${userId}`,
-    status: 200,
-  });
   const foundUser = await userService.getSingleUser(userId);
   return res.json(foundUser);
 };

@@ -5,8 +5,8 @@ import usersController  from "../controllers/usersController"
 const usersRoute = Router()
 
 usersRoute.get('', usersController.getAllUsers)
-usersRoute.get('/:userId', usersMiddleware.checkUserId, usersController.getSingleUser)
-usersRoute.get('/:username', usersMiddleware.checkUserId, usersController.getUserByUsername)
+usersRoute.get('/:userId', usersController.getSingleUser)
+usersRoute.get('/:username', usersController.getUserByUsername)
 usersRoute.get('/:email', usersController.getUserByEmail)
 usersRoute.delete('/:userId', usersController.deleteUserByUserId)
 usersRoute.delete('/:email', usersController.deleteUserByEmail)
