@@ -10,6 +10,25 @@ const createNewBook = async (book: BookDocument) => {
     return await book.save()
 }
 
+const updateBook = async (update: BookDocument) => {
+    try {
+        return await Book.updateMany(
+            {isbn:update.isbn},
+            { $set: {
+                "isbn": update.isbn,
+                "title": update.title,
+                "description": update.description,
+                "category": update.category,
+                "onLoan": update.onLoan,
+                "authors": update.authors,
+                "coverPage": update.coverPage
+                }
+            })
+        } catch (error) {
+            return error
+        }
+}
+
 const getBookByISBN = async (ISBN: string) => {
     return await Book.find({ isbn: ISBN })
 }
@@ -28,8 +47,8 @@ const getBookByTitle = async (bookTitle: string) => {
     })
 }
 
-const getBooksOnLoan = async() => {
-    return await Book.find({onLoan:true})
+const getBooksOnLoan = async () => {
+    return await Book.find({ onLoan: true })
 }
 
 const deleteBook = async (ISBN: string) => {
@@ -71,6 +90,7 @@ const createCategory = async (category: CategoryDocument) => {
 export default {
     getAllBooks,
     getBookByISBN,
+    updateBook,
     createCategory,
     getAllCategories,
     getBooksByCategory,

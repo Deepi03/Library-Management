@@ -7,6 +7,7 @@ const booksRoute = Router()
 
 booksRoute.get('', booksController.getAllBooks)
 booksRoute.post('', multerService.coverPageUpload, booksController.createBook)
+booksRoute.put('/:isbn', multerService.coverPageUpload, booksController.updateBook)
 booksRoute.delete('/deleteBook/:isbn', booksController.deleteBook)
 booksRoute.delete('/deleteCopy/:bookId', booksController.deleteSingleCopy)
 

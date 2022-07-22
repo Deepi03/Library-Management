@@ -10,13 +10,21 @@ import Category from "../models/Category"
 
 const getAllBooks = async (req: Request, res: Response) => {
     const allBooks = await bookService.getAllBooks()
-    return res.json(allBooks)
+    if (allBooks) {
+        return res.json(allBooks)
+    } else {
+        throw new CustomError(404, 'Wait, where did all the books go??')
+    }
 }
 
 const getBookByISBN = async (req: Request, res: Response) => {
     const ISBN  = req.params.isbn
     const foundBook = await bookService.getBookByISBN(ISBN)
-    return res.json(foundBook)
+    if (foundBook){
+        return res.json(foundBook)
+    } else {
+        throw new CustomError(404, 'Book with the ISBN not found')
+    }
 }
 
 const getAllCategories = async (req: Request, res: Response) => {
@@ -33,8 +41,8 @@ const getBooksByCategory = async (req: Request, res: Response) => {
         const category = res.locals.category
         const foundBooks = await bookService.getBooksByCategory(category)
         return res.json(foundBooks)
-    } catch (e) {
-        return res.send(e)
+    } catch (error) {
+        return res.send(error)
     }
 }
 
@@ -85,7 +93,7 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
             const dataBuffer = fs.readFileSync(req.file?.path)
             const data = await sharp(dataBuffer).resize(200,200).toBuffer()
             const savedImage = await imageService.createImage(data)
-            const coverPage = `http://localhost:8080/authorImages/${savedImage._id}`
+            const coverPage = `${savedImage._id}`
             const {
                 isbn,
                 title,
@@ -110,8 +118,49 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
                 throw new CustomError(404, 'File cannot be empty')
             }
       }
-    catch (e) {
-        return next(e)
+    catch (error) {
+        return next(error)
+    }
+}
+
+const updateBook = async(req: Request, res: Response, next: NextFunction) => {
+    try{
+        const ISBN  = req.params.isbn
+        const foundBook = await bookService.getBookByISBN(ISBN)
+        if (foundBook.length > 0) {
+            if(req.file?.path){
+                const dataBuffer = fs.readFileSync(req.file?.path)
+                const data = await sharp(dataBuffer).resize(200,200).toBuffer()
+                const savedImage = await imageService.createImage(data)
+                const coverPage = `${savedImage._id}`
+                const isbn = ISBN
+                const {
+                    title,
+                    description,
+                    category,
+                    onLoan,
+                    authors
+                } = req.body
+
+                const update = new Book({
+                    title,
+                    description,
+                    category,
+                    onLoan,
+                    authors,
+                    coverPage,
+                    isbn
+                })
+                const updatedBooks = await bookService.updateBook(update)
+                return res.status(201).json(updatedBooks);
+            } else {
+                throw new CustomError(404, 'File cannot be empty')
+            }
+        } else {
+            throw new CustomError (404, 'Book with the provided ISBN not found')
+        }
+    } catch (error){
+        return next(error)
     }
 }
 
@@ -120,8 +169,8 @@ const deleteBook = async (req: Request, res: Response, next: NextFunction) => {
         const ISBN  = req.params.isbn
         await bookService.deleteBook(ISBN)
         return res.status(204).send('All copies of the Book deleted')
-    } catch (e) {
-        return res.send(e)
+    } catch (error) {
+        return res.send(error)
     }
 }
 
@@ -131,8 +180,8 @@ const deleteSingleCopy = async (req: Request, res: Response, next: NextFunction)
         console.log(bookId)
         await bookService.deleteSingleCopy(bookId)
         return res.status(204).send('Book deleted')
-    } catch (e) {
-        return next(e)
+    } catch (error) {
+        return next(error)
     }
 }
 
@@ -140,6 +189,7 @@ export default {
     getAllBooks,
     getAllCategories,
     getBooksByCategory,
+    updateBook,
     createCategory,
     getBookByISBN,
     getBookByTitle,
