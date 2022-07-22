@@ -6,7 +6,8 @@ export interface BookDocument extends Document{
     description: string,
     category: number,
     onLoan: boolean,
-    authors: ObjectId[]
+    authors: ObjectId[],
+    coverPage: string
 }
 
 const bookSchema = new Schema<BookDocument>({
@@ -23,8 +24,8 @@ const bookSchema = new Schema<BookDocument>({
         required: true
     },
     category: {
-        type: Number,
-        required: true
+        type: Schema.Types.Number,
+        ref: 'Category'
     },      
     onLoan: {
         type: Boolean,
@@ -35,7 +36,11 @@ const bookSchema = new Schema<BookDocument>({
             type: Schema.Types.ObjectId,
             ref: 'Author'
         }
-    ]
+    ],
+    coverPage: {
+        type: String,
+        required: false
+    }
 })
 
 const Book = mongoose.model<BookDocument>('Book', bookSchema)

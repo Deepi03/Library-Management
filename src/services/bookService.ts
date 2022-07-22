@@ -1,20 +1,17 @@
 import Book, { BookDocument } from "../models/Book"
+import Category, { CategoryDocument } from "../models/Category"
 import { CustomError } from "../types/customError"
 
 const getAllBooks = async () => {
     return await Book.find()
 }
 
+const createNewBook = async (book: BookDocument) => {
+    return await book.save()
+}
+
 const getBookByISBN = async (ISBN: string) => {
     return await Book.find({ isbn: ISBN })
-}
-
-const getBooksByCategory = async (category: number) => {
-    return await Book.find({ category: category })
-}
-
-const getBooksOnLoan = async() => {
-    return await Book.find({onLoan:true})
 }
 
 const getBookByTitle = async (bookTitle: string) => {
@@ -31,8 +28,8 @@ const getBookByTitle = async (bookTitle: string) => {
     })
 }
 
-const createNewBook = async (book: BookDocument) => {
-    return await book.save()
+const getBooksOnLoan = async() => {
+    return await Book.find({onLoan:true})
 }
 
 const deleteBook = async (ISBN: string) => {
@@ -55,9 +52,27 @@ const deleteSingleCopy = async (bookId: string) => {
     }
 }
 
+const getAllCategories = async () => {
+    try {
+        return await Category.find()
+    } catch (error) {
+        return error
+    }
+}
+
+const getBooksByCategory = async (category: number) => {
+    return await Book.find({ category: category })
+}
+
+const createCategory = async (category: CategoryDocument) => {
+    return await category.save()
+}
+
 export default {
     getAllBooks,
     getBookByISBN,
+    createCategory,
+    getAllCategories,
     getBooksByCategory,
     getBooksOnLoan,
     getBookByTitle,
