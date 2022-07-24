@@ -1,4 +1,5 @@
 import mongoose, { Document, Schema, ObjectId } from "mongoose"
+import { getLeadingCommentRanges } from "typescript";
 
 export type UserRole = "guest" | "admin";
 
@@ -10,8 +11,9 @@ export interface UserDocument extends Document{
     email: string,
     password: string,
     // avatar: string,
-    role: UserRole
-    // onLoan: ObjectId[]
+    role: UserRole,
+    loans: Object[],
+    loanBasket: string[]
 }
 
 const userSchema = new Schema<UserDocument>({
@@ -49,13 +51,32 @@ const userSchema = new Schema<UserDocument>({
     role: {
         type: String,
         enum: ["guest", "admin"]
-    }
-    // onLoan: [
-    //     {
-    //         type: Schema.Types.ObjectId,
-    //         ref: 'Book'
-    //     }
-    // ]
+    },
+    
+    loans: [
+        {
+            bookId: {
+                type: String,
+                required: true
+            },
+            borrowDate: {
+                type: String,
+                required: true
+            },
+            returnDate: {
+                type: String,
+                required: true
+            }
+        }
+    ],
+
+    loanBasket: [
+            {
+                type: String,
+                required: true,
+                unique: true
+            }
+    ]
 })
 
 const User = mongoose.model<UserDocument>('User', userSchema)

@@ -41,26 +41,26 @@ const postUser = (req: Request, res: Response) => {
 const createUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     // if (req.file?.path) {
-      // const dataBuffer = fs.readFileSync(req.file?.path);
-      // const data = await sharp(dataBuffer).resize(200, 200).toBuffer();
-      // const savedImage = await imageService.createImage(data);
-      // const avatar = `http://localhost:8080/images/${savedImage._id}`;
-      // const role: UserRole = "guest";
-      let { firstname, lastname, username, phone, email, password } = req.body;
-      console.log(firstname)
+    // const dataBuffer = fs.readFileSync(req.file?.path);
+    // const data = await sharp(dataBuffer).resize(200, 200).toBuffer();
+    // const savedImage = await imageService.createImage(data);
+    // const avatar = `http://localhost:8080/images/${savedImage._id}`;
+    // const role: UserRole = "guest";
+    let { firstname, lastname, username, phone, email, password } = req.body;
+    console.log(firstname)
 
-      const user = new User({
-        firstname,
-        lastname,
-        username,
-        phone,
-        email,
-        password,
-        // avatar,
-        // role,
-      });
-      const newUser = await userService.createUser(user);
-      return res.status(201).json(newUser);
+    const user = new User({
+      firstname,
+      lastname,
+      username,
+      phone,
+      email,
+      password,
+      // avatar,
+      // role,
+    });
+    const newUser = await userService.createUser(user);
+    return res.status(201).json(newUser);
     // } else {
     //     throw new CustomError(404, 'File cannot be empty')
     // }
@@ -70,18 +70,18 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 const deleteUserByUserId = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
-    try {
-      const userId = req.params.userId;
-      await userService.deleteUser(userId);
-      return res.status(204).send("User has been deleted by Id");
-    } catch (e) {
-      return next(e);
-    }
-  };
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId = req.params.userId;
+    await userService.deleteUser(userId);
+    return res.status(204).send("User has been deleted by Id");
+  } catch (e) {
+    return next(e);
+  }
+};
 
 const deleteUserByUsername = async (
   req: Request,
@@ -111,6 +111,71 @@ const deleteUserByEmail = async (
   }
 };
 
+
+const addBookToBasket = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = req.params.userId
+    const { bookId } = req.body
+    const updatedUser = await userService.addBookToBasket(userId, bookId)
+    return res.status(201).json(updatedUser)
+  } catch (error) {
+    return next(error)
+  }
+}
+
+const deleteBookFromBasket = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = req.params.userId
+    const { bookId } = req.body
+    const updatedBasket = await userService.deleteBookFromBasket(userId, bookId)
+    return res.json(updatedBasket)
+  } catch (error) {
+    return error
+  }
+}
+
+const viewUserBasket = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = req.params.userId
+    const userBasket = await userService.viewUserBasket(userId)
+    return res.json(userBasket)
+  } catch (error) {
+    return error
+  }
+}
+
+const checkoutBasket = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = req.params.userId
+    const updatedUser = await userService.checkoutBasket(userId)
+    return res.json(updatedUser)
+  } catch (error) {
+    return next(error)
+  }
+}
+
+const viewLoans = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { userId } = req.params
+    const loans = await userService.viewLoans(userId)
+    return res.json(loans)
+  } catch (error) {
+    return next(error)
+  }
+}
+
+const returnBook = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = req.params.userId
+    const { bookId } = req.body
+    const updatedUser = await userService.returnBook(userId, bookId)
+    return res.json(updatedUser)
+  } catch (error) {
+    return next(error)
+  }
+}
+
+
 export default {
   getAllUsers,
   getSingleUser,
@@ -120,5 +185,11 @@ export default {
   createUser,
   deleteUserByUsername,
   deleteUserByEmail,
-  deleteUserByUserId
+  deleteUserByUserId,
+  addBookToBasket,
+  deleteBookFromBasket,
+  viewUserBasket,
+  checkoutBasket,
+  viewLoans,
+  returnBook
 };

@@ -9,20 +9,6 @@ const removeEmptySpaces = (req: Request, res: Response, next: NextFunction) => {
     next();
   };
 
-const displayOnloanBooksOfASingleUser = (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
-    const userId = req.params.userId;
-    if (Number(userId) > 0) {
-      console.log(`User  ${userId} from user middleware`);
-    } else {
-      throw new CustomError(400, "UserId must be greater than 0");
-    }
-    next();
-  }; 
-
 
 const checkUserId = (req: Request, res: Response, next : NextFunction)=>{
     const userId = req.params.userId
@@ -66,7 +52,6 @@ const authenticateUser = (req: Request, res: Response, next: NextFunction) => {
 
 export default {
     removeEmptySpaces,
-    displayOnloanBooksOfASingleUser,
     checkUserId,
     authenticateUser
 }

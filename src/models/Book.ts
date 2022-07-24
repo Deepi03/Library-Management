@@ -4,7 +4,7 @@ export interface BookDocument extends Document{
     isbn: string,
     title: string,
     description: string,
-    category: number,
+    category: string[],
     onLoan: boolean,
     authors: ObjectId[],
     coverPage: string
@@ -23,13 +23,16 @@ const bookSchema = new Schema<BookDocument>({
         type: String,
         required: true
     },
-    category: {
-        type: Schema.Types.Number,
-        ref: 'Category'
-    },      
+    category: [
+        {
+            type: String,
+            required: true
+        }
+    ],      
     onLoan: {
         type: Boolean,
-        required: true
+        required: true,
+        default: false
     },
     authors: [
         {

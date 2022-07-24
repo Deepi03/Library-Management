@@ -18,5 +18,4 @@ booksRoute.get('/categories/:category', booksMiddleware.checkCategory, booksCont
 booksRoute.get('/findByISBN/:isbn', booksController.getBookByISBN)
 booksRoute.get('/findByTitle/:title', booksMiddleware.removeHyphens, booksController.getBookByTitle)
 booksRoute.get('/onLoan', booksController.getBooksOnLoan)
-
 export default booksRoute
