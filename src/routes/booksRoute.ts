@@ -12,8 +12,7 @@ booksRoute.delete('/deleteBook/:isbn', booksController.deleteBook)
 booksRoute.delete('/deleteCopy/:bookId', booksController.deleteSingleCopy)
 
 booksRoute.get('/categories', booksController.getAllCategories)
-booksRoute.post('/categories', booksController.createCategory)
-booksRoute.get('/categories/:category', booksMiddleware.checkCategory, booksController.getBooksByCategory)
+booksRoute.get('/categories/:category', booksController.getBooksByCategory)
 
 booksRoute.get('/findByISBN/:isbn', booksController.getBookByISBN)
 booksRoute.get('/findByTitle/:title', booksMiddleware.removeHyphens, booksController.getBookByTitle)

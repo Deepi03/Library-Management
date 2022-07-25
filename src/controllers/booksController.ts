@@ -6,7 +6,6 @@ import imageService from "../services/imageService"
 import Book from "../models/Book"
 import { CustomError } from "../types/customError"
 import bookService from "../services/bookService"
-import Category from "../models/Category"
 
 const getAllBooks = async (req: Request, res: Response) => {
     const allBooks = await bookService.getAllBooks()
@@ -38,33 +37,12 @@ const getAllCategories = async (req: Request, res: Response) => {
 
 const getBooksByCategory = async (req: Request, res: Response) => {
     try {
-        const category = res.locals.category
+        const category = req.params.category
         const foundBooks = await bookService.getBooksByCategory(category)
         return res.json(foundBooks)
     } catch (error) {
         return res.send(error)
     }
-}
-
-const createCategory = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const {
-            _id,
-            name
-        } = req.body
-
-        const category = new Category({
-            _id,
-            name
-        })
-
-        // const newBook = await book.save()
-        const newCategory = await bookService.createCategory(category)
-        return res.status(201).json(newCategory)
-    } catch (error) {
-        return next(error)
-    }
-
 }
 
 const getBookByTitle = async(req: Request, res: Response) => {
@@ -99,7 +77,6 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
                 title,
                 description,
                 category,
-                onLoan,
                 authors
             } = req.body
 
@@ -108,7 +85,6 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
                 title,
                 description,
                 category,
-                onLoan,
                 authors,
                 coverPage
             })
@@ -190,7 +166,6 @@ export default {
     getAllCategories,
     getBooksByCategory,
     updateBook,
-    createCategory,
     getBookByISBN,
     getBookByTitle,
     getBooksOnLoan,
