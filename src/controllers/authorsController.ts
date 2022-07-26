@@ -85,13 +85,17 @@ const deleteAuthor = async (req: Request, res: Response, next: NextFunction) => 
     }
 }
 
-/* const getBooksByAuthor = (req: Request, res: Response) => {
+const getBooksByAuthor = async (req: Request, res: Response) => {
   const authorId = req.params.authorId;
-  return res.send({
-    authorId: authorId,
-    message: `Books of author with  ${authorId}`,
-    status: 200
-  });
-}; */
+  const booksByAuthor = await authorService.getBooksByAuthor(authorId)
+  return res.json(booksByAuthor)
+};
 
-export default { getAllAuthors, getSingleAuthor, createAuthor,updateAuthor,deleteAuthor };
+export default {
+  getAllAuthors,
+  getSingleAuthor,
+  createAuthor,
+  updateAuthor,
+  deleteAuthor,
+  getBooksByAuthor
+ };

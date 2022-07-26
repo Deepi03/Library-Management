@@ -19,6 +19,6 @@ authorRoute.put(
 );
 authorRoute.get("/:authorId", authorsController.getSingleAuthor);
 authorRoute.delete("/:authorId", authorsController.deleteAuthor);
-/* authorRoute.get("/:authorId/books", displayBooksOfAnAuthor, getBooksByAuthor); */
+authorRoute.get("/:authorId/books", authorsController.getBooksByAuthor);
 
 export default authorRoute;

@@ -1,6 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { CustomError } from "../types/customError";
 import Author, { AuthorDocument } from "../models/Author";
+import Book from "../models/Book";
+
+const { ObjectId } = require('mongodb')
 
 const getAllAuthors = async () => {
   return await Author.find();
@@ -44,10 +47,50 @@ const deleteAuthor = async (authorId: string) => {
   }
 };
 
+const getBooksByAuthor = async (authorId: string) => {
+  const foundAuthor = await Author.findById(authorId)
+  if (foundAuthor) {
+    return await Book.aggregate([
+      {
+        '$project': {
+          '_id': 0,
+          'isbn': 1,
+          'title': 2,
+          'authors': 3,
+          'category': 4,
+          'description': 5,
+          'onLoan': 6
+        }
+      }, {
+        '$unwind': {
+          'path': '$authors'
+        }
+      }, {
+        '$group': {
+          '_id': '$authors',
+          'title': {'$first': '$title'},
+          'description': {'$first': '$description'},
+          'category': {'$first': '$category'},
+          'availableCopies': {
+            '$sum': {
+              '$cond': [{ '$eq': [ '$onLoan', false ]}, 1, 0]
+            }
+          }
+        }
+      }, {
+        '$match': {
+          '_id': new ObjectId(authorId)
+        }
+      }
+    ])
+  }
+}
+
 export default {
   createAuthor,
   updateAuthor,
   getAllAuthors,
   getSingleAuthor,
-  deleteAuthor
+  deleteAuthor,
+  getBooksByAuthor
 };
