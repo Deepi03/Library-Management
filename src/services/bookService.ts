@@ -1,5 +1,6 @@
 import Book, { BookDocument } from "../models/Book"
 import { CustomError } from "../types/customError"
+import Author from "../models/Author"
 
 const getAllBooks = async () => {
     return await Book.aggregate([
@@ -26,6 +27,13 @@ const getAllBooks = async () => {
                         '$cond': [{ '$eq': [ '$onLoan', false ]}, 1, 0]
                     }
                 }
+            }
+        }, {
+            '$lookup': {
+              'from': 'authors', 
+              'localField': 'authors', 
+              'foreignField': '_id', 
+              'as': 'authors'
             }
         }
     ])
@@ -138,17 +146,36 @@ const getAllCategories = async () => {
 
 const getBooksByCategory = async (category: string) => {
     // return await Book.find({ category: category })
-    return await Book.aggregate([{
-        '$search': {
-          'index': 'categoryIndex',
-          'text': {
-            'query': category,
-            'path': {
-              'wildcard': '*'
+    return await Book.aggregate([
+        {
+            '$search': {
+                'index': 'categoryIndex',
+                'text': {
+                    'query': category,
+                    'path': {
+                        'wildcard': '*'
+                    }
+                }
             }
-          }
+        },{
+            '$project': {
+                '_id': 0, 
+                'isbn': 1, 
+                'title': 2, 
+                'authors': 3, 
+                'category': 4, 
+                'description': 5, 
+                'onLoan': 6
+            }
+        }, {
+            '$lookup': {
+              'from': 'authors', 
+              'localField': 'authors', 
+              'foreignField': '_id', 
+              'as': 'authors'
+            }
         }
-      }])
+    ])
 }
 
 export default {

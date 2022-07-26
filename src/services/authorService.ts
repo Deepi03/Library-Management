@@ -52,6 +52,10 @@ const getBooksByAuthor = async (authorId: string) => {
   if (foundAuthor) {
     return await Book.aggregate([
       {
+        '$match': {
+          'authors': new ObjectId(authorId)
+        }
+      }, {
         '$project': {
           '_id': 0,
           'isbn': 1,
@@ -69,6 +73,7 @@ const getBooksByAuthor = async (authorId: string) => {
         '$group': {
           '_id': '$authors',
           'title': {'$first': '$title'},
+          'isbn': {'$first': '$isbn'},
           'description': {'$first': '$description'},
           'category': {'$first': '$category'},
           'availableCopies': {
@@ -76,10 +81,6 @@ const getBooksByAuthor = async (authorId: string) => {
               '$cond': [{ '$eq': [ '$onLoan', false ]}, 1, 0]
             }
           }
-        }
-      }, {
-        '$match': {
-          '_id': new ObjectId(authorId)
         }
       }
     ])
