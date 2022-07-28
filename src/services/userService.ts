@@ -3,15 +3,12 @@ import { CustomError } from "../types/CustomError";
 import User, { UserDocument } from "../models/User";
 import Book from "../models/Book";
 
+
 const getAllUsers = async () => {
     return await User.find()
 }
 
-const getUserByUsername = async (username: string) => {
-    return await User.findOne({ username: username })
-}
-
-const getUserByEmail = async (email: string) => {
+const getUserByEmail = async (email: string): Promise <UserDocument|null> => {
     return await User.findOne({ email: email })
 }
 
@@ -173,7 +170,6 @@ const returnBook = async (userId: string, bookId: string) => {
 
 export default {
     getAllUsers,
-    getUserByUsername,
     getUserByEmail,
     getSingleUser,
     createUser,

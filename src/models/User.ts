@@ -1,16 +1,16 @@
 import mongoose, { Document, Schema, ObjectId } from "mongoose"
-import { getLeadingCommentRanges } from "typescript";
+import bcrypt from 'bcrypt'
 
 export type UserRole = "guest" | "admin";
 
 export interface UserDocument extends Document{
     firstname: string,
     lastname: string,
-    username: string,
     phone: string,
     email: string,
     password: string,
-    // avatar: string,
+    comparePassword(password:string): Promise<boolean>,
+    avatar: string,
     role: UserRole,
     loans: Object[],
     loanBasket: string[]
@@ -25,11 +25,6 @@ const userSchema = new Schema<UserDocument>({
         type: String,
         required: true
     },
-    username: {
-        type: String,
-        required: true,
-        unique: true
-    },
     phone: {
         type: String,
         required: true,
@@ -39,18 +34,24 @@ const userSchema = new Schema<UserDocument>({
     email: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        validate: {
+            validator: (value: string) => {
+                return /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value)
+            },
+            message: props => `${props.value} is not a valid email`
+        }
     },
     password: {
         type: String,
         required: true
     },
-    // avatar: {
-    //     type: String,
-    // },
+    avatar: {
+        type: String,
+    },
     role: {
         type: String,
-        enum: ["guest", "admin"]
+        enum: ["member", "admin"]
     },
     
     loans: [
@@ -78,6 +79,21 @@ const userSchema = new Schema<UserDocument>({
             }
     ]
 })
+
+userSchema.pre<UserDocument>('save', { document: true, query: false }, async function(next) {
+    if (this.isModified('password') || this.isNew) {
+        try {
+            this.password = await bcrypt.hash(this.password, 10)
+            return next()
+        } catch (e: any) {
+            return next(e)
+        }
+    }
+})
+
+userSchema.methods.comparePassword = async function(password: string) {
+    return await bcrypt.compare(password, this.password)
+}
 
 const User = mongoose.model<UserDocument>('User', userSchema)
 export default User

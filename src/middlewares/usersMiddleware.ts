@@ -1,57 +1,51 @@
 import { Request, Response, NextFunction } from "express"
-// import jwt from 'jsonwebtoken'
+import User from "../models/User";
+import jwt  from "jsonwebtoken";
 
 import { CustomError } from "../types/CustomError"
 
-const removeEmptySpaces = (req: Request, res: Response, next: NextFunction) => {
-    req.body.firstname = req.body.firstname.replace(/\s/g, "");
-    req.body.lastname = req.body.lastname.replace(/\s/g, "");
-    next();
-  };
 
-
-const checkUserId = (req: Request, res: Response, next : NextFunction)=>{
-    const userId = req.params.userId
-    const existingUsers = ['1','2','3','4','5'] //dummy list of existing users
-    if ( !existingUsers.includes(userId) ){
-        throw new CustomError(400,`User ID not found`)
+const authenticateUser = async (req: Request, res: Response, next: NextFunction) => {
+    const { email, password } = req.body
+    const user = {email, password}
+    const foundUser = await User.findOne({ email: email })
+    if (foundUser) {
+      const checkPassword = await foundUser.comparePassword(password)
+      if (checkPassword) {
+        req.body = user
+        next()
+      } else {
+        throw new CustomError(401, 'Credentials do not match')
+      }
+    } else {
+      throw new CustomError(404, 'User not found')
     }
-    console.log(`I am a middleware. I check if a user exists`)
-    next()
 }
 
-const authenticateUser = (req: Request, res: Response, next: NextFunction) => {
-    const { username, password } = req.body
-    const user = { username, password }
-    console.log(user)
-    if (username === 'avinash' && password === '12345') {
+const verifyAdmin = (req: Request, res: Response, next: NextFunction) => {
+    const user = req.body
+    if (user.role === 'admin') {
         next()
     } else {
-        throw new CustomError(401, 'Login credential is not right')
+        throw new CustomError(401, 'You do not have right to access')
     }
 }
 
-// export const verifyAdmin = (req: Request, res: Response, next: NextFunction) => {
-//     const user = req.user
-//     if (user?.role === 'admin') {
-//         next()
-//     } else {
-//         throw new CustomError(401, 'You do not have right to access')
-//     }
-// }
 
-/* export const decodeUserToken = (req: Request, res: Response, next: NextFunction) => {
+const verifyToken = (req: Request, res: Response, next: NextFunction) => {
     const { token } = req.body
-    const decoded = jwt.verify(token, 'mysecretkey');
-    if (//some condition) {
-        next()
+    // console.log("Token:", token)
+    const decoded = jwt.verify(token, `${process.env.JWT_SECRET}`);
+    if (decoded) {
+      // console.log("Decoded:", decoded)
+      return res.json(decoded)
     } else {
-        throw new CustomError(404, 'user not found')
+      throw new CustomError(404, 'Token not found')
     }
-} */
+  }
 
 export default {
-    removeEmptySpaces,
-    checkUserId,
-    authenticateUser
+    authenticateUser,
+    verifyAdmin,
+    verifyToken
 }

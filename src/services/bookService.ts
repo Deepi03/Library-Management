@@ -1,6 +1,5 @@
 import Book, { BookDocument } from "../models/Book"
 import { CustomError } from "../types/customError"
-import Author from "../models/Author"
 
 const getAllBooks = async () => {
     return await Book.aggregate([

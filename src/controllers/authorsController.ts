@@ -4,8 +4,6 @@ import fs from 'fs'
 import sharp from 'sharp'
 import imageService from "../services/imageService"
 
-import uuid from "uuid4";
-
 import Author  from '../models/Author'
 import  {CustomError}  from "../types/customError";
 import authorService from "../services/authorService";
