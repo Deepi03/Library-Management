@@ -5,9 +5,18 @@ import userService from '../services/userService'
 import User from '../models/User'
 require('dotenv').config()
 
+passport.serializeUser(function (user, done) {
+    done(null, user)
+})
+
+passport.deserializeUser(function (user: any, done) {
+    done(null, user)
+})
+
 export const jwtStrategy = new JwtStrategy.Strategy(
     { jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), secretOrKey: `${process.env.JWT_SECRET}` }, (jwt_payload, done) => {
         const user = jwt_payload
+        // console.log("User from strategy", user)
         done(null, user)
     }
 )
@@ -29,7 +38,8 @@ export const googleStrategy = new Strategy(
                 firstname: profile.name?.givenName,
                 lastname: profile.name?.familyName,
                 email: profile.emails ? profile.emails[0].value : '',
-                avatar: profile.profileUrl
+                avatar: profile.profileUrl,
+                role: "member"
             })
             user = await userService.createUser(newUser)
             return cb(null, user)

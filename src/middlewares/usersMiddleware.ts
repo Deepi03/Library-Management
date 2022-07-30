@@ -12,7 +12,7 @@ const authenticateUser = async (req: Request, res: Response, next: NextFunction)
     if (foundUser) {
       const checkPassword = await foundUser.comparePassword(password)
       if (checkPassword) {
-        req.body = user
+        req.body = foundUser
         next()
       } else {
         throw new CustomError(401, 'Credentials do not match')
@@ -23,12 +23,12 @@ const authenticateUser = async (req: Request, res: Response, next: NextFunction)
 }
 
 const verifyAdmin = (req: Request, res: Response, next: NextFunction) => {
-    const user = req.body
-    if (user.role === 'admin') {
-        next()
-    } else {
-        throw new CustomError(401, 'You do not have right to access')
-    }
+  const user = new User(req.user)
+  if (user.role === 'admin') {
+    next()
+  } else {
+    throw new CustomError(401, 'You do not have right to access this page')
+  }
 }
 
 

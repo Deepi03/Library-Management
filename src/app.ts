@@ -37,9 +37,9 @@ passport.use(jwtStrategy)
 
 
 /** MIDDLEWARES **/
-app.use(express.urlencoded()); //Decode Form URL Encoded data
 app.use(express.json()) //JSON 
 app.use(express.text()) //text
+app.use(express.urlencoded()); //Decode Form URL Encoded data
 app.use(express.static(path.join(__dirname, '../public'))) 
 //express.static helps access files that are outside of /src. It opens up the public folder for node.
 // now /images can also be accessed

@@ -8,11 +8,9 @@ import jwt from 'jsonwebtoken'
 require('dotenv').config()
 
 const userLogin = (req: Request, res: Response) => {
-  // console.log('Plain Text:', req.body)
-  const token = jwt.sign(req.body, `${process.env.JWT_SECRET}`, {
+  const token = jwt.sign(JSON.stringify(req.body), `${process.env.JWT_SECRET}`, {
     algorithm: "HS256"
   })
-  // console.log('Encrypted Token:', token)
   return res.json(token)
 }
 
