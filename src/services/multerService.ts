@@ -8,8 +8,12 @@ const storage = multer.diskStorage({
 });
 
 //reads from form input and store it in above storage
-const fileUpload = multer({
-  storage
-}).single("avatar");
+/** Author Avatar **/
+const fileUpload = multer({ storage }).single("avatar");
+/** Book Coverpage **/
+const coverPageUpload = multer({ storage }).single("coverPage")
 
-export default fileUpload;
+export default {
+  fileUpload,
+  coverPageUpload
+}

@@ -3,12 +3,9 @@ import { CustomError } from "../types/customError";
 
 export const errorHandler = (err: Error | CustomError, req: Request, res: Response, nxt: NextFunction) => {
     if (err instanceof CustomError){
-        return res.send({
-            status: err.status,
-            message: err.message
-        })
+        return res.status(err.status).json(err)
     }else{
-        return res.send(err.message)
+        return res.status(500).send(err.message)
     }
     
 }

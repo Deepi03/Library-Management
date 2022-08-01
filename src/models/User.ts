@@ -1,17 +1,19 @@
 import mongoose, { Document, Schema, ObjectId } from "mongoose"
+import bcrypt from 'bcrypt'
 
-export type UserRole = "guest" | "admin";
+export type UserRole = "member" | "admin";
 
 export interface UserDocument extends Document{
     firstname: string,
     lastname: string,
-    username: string,
     phone: string,
     email: string,
     password: string,
-    // avatar: string,
-    role: UserRole
-    // onLoan: ObjectId[]
+    comparePassword(password:string): Promise<boolean>,
+    avatar: string,
+    role: UserRole,
+    loans: Object[],
+    loanBasket: string[]
 }
 
 const userSchema = new Schema<UserDocument>({
@@ -23,11 +25,6 @@ const userSchema = new Schema<UserDocument>({
         type: String,
         required: true
     },
-    username: {
-        type: String,
-        required: true,
-        unique: true
-    },
     phone: {
         type: String,
         required: true,
@@ -37,26 +34,67 @@ const userSchema = new Schema<UserDocument>({
     email: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        validate: {
+            validator: (value: string) => {
+                return /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value)
+            },
+            message: props => `${props.value} is not a valid email`
+        }
     },
     password: {
         type: String,
         required: true
     },
-    // avatar: {
-    //     type: String,
-    // },
+    avatar: {
+        type: String,
+    },
     role: {
         type: String,
-        enum: ["guest", "admin"]
-    }
-    // onLoan: [
-    //     {
-    //         type: Schema.Types.ObjectId,
-    //         ref: 'Book'
-    //     }
-    // ]
+        enum: ["member", "admin"],
+        required: true
+    },
+    
+    loans: [
+        {
+            bookId: {
+                type: String,
+                required: true
+            },
+            borrowDate: {
+                type: String,
+                required: true
+            },
+            returnDate: {
+                type: String,
+                required: true
+            }
+        }
+    ],
+
+    loanBasket: [
+            {
+                type: String,
+                required: true,
+                unique: true
+            }
+    ]
 })
+
+userSchema.pre<UserDocument>('save', { document: true, query: false }, async function(next) {
+    if (this.isModified('password') || this.isNew) {
+        try {
+            this.password = await bcrypt.hash(this.password, 10)
+            return next()
+        } catch (e: any) {
+            return next(e)
+        }
+    }
+})
+
+userSchema.methods.comparePassword = async function(password: string) {
+    return await bcrypt.compare(password, this.password)
+}
 
 const User = mongoose.model<UserDocument>('User', userSchema)
 export default User
