@@ -19,7 +19,7 @@ get:
 post:
   tags:
     - authors
-  summary: Create a new author
+  summary: Creates a new author
   description: 
     Create a new author by sending an object 
   produces:
