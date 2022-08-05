@@ -57,12 +57,12 @@ const getBooksByAuthor = async (authorId: string) => {
         }
       }, {
         '$project': {
-          '_id': 0,
-          'isbn': 1,
-          'title': 2,
-          'authors': 3,
-          'category': 4,
-          'description': 5,
+          '_id': 0, 
+          'isbn': 1, 
+          'title': 2, 
+          'authors': 3, 
+          'category': 4, 
+          'description': 5, 
           'onLoan': 6
         }
       }, {
@@ -70,17 +70,39 @@ const getBooksByAuthor = async (authorId: string) => {
           'path': '$authors'
         }
       }, {
+        '$match': {
+          'authors': new ObjectId(authorId)
+        }
+      }, {
         '$group': {
-          '_id': '$authors',
-          'title': {'$first': '$title'},
-          'isbn': {'$first': '$isbn'},
-          'description': {'$first': '$description'},
-          'category': {'$first': '$category'},
+          '_id': '$title', 
+          'title': {
+            '$first': '$title'
+          }, 
+          'isbn': {
+            '$first': '$isbn'
+          }, 
+          'description': {
+            '$first': '$description'
+          }, 
+          'category': {
+            '$first': '$category'
+          }, 
           'availableCopies': {
             '$sum': {
-              '$cond': [{ '$eq': [ '$onLoan', false ]}, 1, 0]
+              '$cond': [{ '$eq': ['$onLoan', false]}, 1, 0]
             }
           }
+        }
+      }, {
+        '$project': {
+          '_id': 0, 
+          'isbn': 1, 
+          'title': 2, 
+          'authors': 3, 
+          'category': 4, 
+          'description': 5, 
+          'availableCopies': 6
         }
       }
     ])
@@ -89,7 +111,7 @@ const getBooksByAuthor = async (authorId: string) => {
 
 export default {
   createAuthor,
-  updateAuthor,
+  updateAuthor, 
   getAllAuthors,
   getSingleAuthor,
   deleteAuthor,

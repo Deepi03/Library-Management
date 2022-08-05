@@ -3,12 +3,6 @@ get:
     - "books"
   summary: "Get all categories"
   description: "Returns a list of categories along with the number of titles under each category"
-  parameters:
-    - name: "category"
-      in: "path"
-      description: "Category name should be provided as a parameter."
-      required: true
-      type: "string"
   produces:
     - "application/xml"
     - "application/json"
@@ -18,4 +12,4 @@ get:
       schema:
         type: "array"
         items:
-          $ref: "../schemas/categorySchema.yaml"
+          $ref: "../schemas/bookSchema.yaml"

@@ -1,0 +1,19 @@
+delete:
+  tags:
+  - "books"
+  summary: "Delete all copies of a book"
+  description: "This endpoint allows you to delete all copies of a book having the same ISBN. You can delete books by adding 'isbn' as a parameter"
+  produces:
+  - "application/xml"
+  - "application/json"
+  parameters:
+    - name: "isbn"
+      in: "path"
+      description: "The string 'isbn' of the books is provided as parameter. The isbn is then used to carry out a deleteMany operation"
+      required: true
+      type: "string"
+  responses:
+    "204":
+      description: "All copies of the book with the given isbn deleted."
+    "404":
+      description: "The book with the ISBN you provided was not found"

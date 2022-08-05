@@ -1,0 +1,28 @@
+put:
+  tags:
+    - users
+  summary: "Remove book from loan basket"
+  description: "This endpoint allows you to remove a book from the basket. It is a PUT operation because we are updating the user object which holds the loan basket."
+  produces:
+    - "application/xml"
+    - "application/json"
+  parameters:
+    - in: "path"
+      name: "userId"
+      description: "The mongodb ObjectId for the user"
+      required: true
+      type: string
+  requestBody:
+    required: true
+    content:
+      "application/json":
+        schema:
+          type: "object"
+          properties:
+            bookId:
+              type: "string"
+  responses:
+    default:
+      description: "successful operation"
+    404:
+      description: "Book not found"

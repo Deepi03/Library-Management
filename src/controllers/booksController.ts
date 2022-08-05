@@ -55,9 +55,18 @@ const getBookByTitle = async(req: Request, res: Response) => {
     }
 }
 
+const getBookById = async(req: Request, res: Response) => {
+    try {
+        const bookId = req.params.booksIndex
+        const foundBook = await bookService.getBookById(bookId)
+        return res.json(foundBook)
+    } catch (error) {
+        return res.send(error)
+    }
+}
+
 const getBooksOnLoan = async (req: Request, res: Response) => {
     try {
-        // const onLoan  = (req.params.onLoan === 'true')
         const foundBooks = await bookService.getBooksOnLoan()
         return res.json(foundBooks)
     } catch (error) {
@@ -153,7 +162,6 @@ const deleteBook = async (req: Request, res: Response, next: NextFunction) => {
 const deleteSingleCopy = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const bookId = req.params.bookId
-        console.log(bookId)
         await bookService.deleteSingleCopy(bookId)
         return res.status(204).send('Book deleted')
     } catch (error) {
@@ -166,6 +174,7 @@ export default {
     getAllCategories,
     getBooksByCategory,
     updateBook,
+    getBookById,
     getBookByISBN,
     getBookByTitle,
     getBooksOnLoan,

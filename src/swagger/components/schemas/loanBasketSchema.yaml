@@ -1,0 +1,14 @@
+type: "object"
+properties:
+  firstname:
+    type: "string"
+  lastname:
+    type: "string"
+  loanBasket:
+    type: "array"
+    description: "An array of bookId strings"
+    items:
+      type: "string"
+
+xml:
+  name: "BookId"

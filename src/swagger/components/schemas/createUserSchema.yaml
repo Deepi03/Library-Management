@@ -1,31 +1,25 @@
 type: "object"
 properties:
-  id:
-    type: "string"
   firstname:
     type: "string"
+    required: true
   lastname:
     type: "string"
+    required: true
   email:
     type: "string"
+    required: true
   password:
     type: "string"
+    required: true
   phone:
     type: "string"
+    required: true
   role:
     type: "string"
+    default: "member"
   avatar:
     type: "string"
     format: "binary"
-  loanBasket:
-    type: "array"
-    description: "An array of bookId strings"
-    items:
-      type: "string"
-  loans:
-    type: "array"
-    description: "An array of bookId strings"
-    items:
-      type: "string"
 xml:
   name: "User"

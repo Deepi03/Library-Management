@@ -1,0 +1,25 @@
+put:
+  tags:
+    - books
+  summary: "Update book"
+  description: "This endpoint allows you to update the details of all the copies of a book"
+  produces:
+    - "application/xml"
+    - "application/json"
+  parameters:
+    - in: "path"
+      name: "bookId"
+      description: "The mongodb ObjectId for the book to be updated."
+      required: true
+  requestBody:
+    required: true
+    content:
+      "application/json":
+        schema:
+          type: "object"
+          $ref: "../schemas/updateBookSchema.yaml"
+  responses:
+    200:
+      description: "Successfully updated book"
+    404:
+      description: "Book not found"

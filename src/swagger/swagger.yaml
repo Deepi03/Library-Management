@@ -25,26 +25,42 @@ tags:
 paths:
   /books:
     $ref: "./components/books/books.yaml"
-  /books/findByISBN/{isbn}:
+  /books/getbyId/:isbn:
     $ref: "./components/books/findByISBN.yaml"
-  /books/findByTitle/{title}:
+  /books/getByTitle/:title:
     $ref: "./components/books/findByTitle.yaml"
+  /books/deleteCopy/:bookId:
+    $ref: "./components/books/deleteCopy.yaml"
+  /books/deleteBook/:isbn:
+    $ref: "./components/books/deleteBook.yaml"
   /books/onloan:
     $ref: "./components/books/onloan.yaml"
   /books/categories/{category}:
     $ref: "./components/books/categories.yaml"
+  
   /users:
     $ref: "./components/users/users.yaml"
-  /users/createWithArray:
-    $ref: "./components/users/createWithArray.yaml"
-  /users/createWithList:
-    $ref: "./components/users/createWithList.yaml"
   /users/login:
-    $ref: "./components/users/login.yaml"      
-  /users/logout:
-    $ref: "./components/users/logout.yaml"
-  /users/{username}:
-    $ref: "./components/users/findByUsername.yaml"
+    $ref: "./components/users/login.yaml"
+
+  /users/:userId:
+    $ref: "./components/users/byUserId.yaml"
+  /users/:userId/addtobasket:
+    $ref:"/components/users/addToBasket.yaml"
+  /users/:userId/removefrombasket:
+    $ref:"/components/users/removeFromBasket.yaml"
+  /users/:userId/viewbasket:
+    $ref:"/components/users/viewBasket.yaml"
+  /users/:userId/checkout:
+    $ref:"/components/users/checkout.yaml"
+  /users/:userId/viewloans:
+    $ref:"/components/users/viewLoans.yaml"
+  /users/:userId/returnbook:
+    $ref:"/components/users/returnBook.yaml"
+  
+  /users/:email:
+    $ref: "./components/users/byEmail.yaml"
+  
   /authors:
     $ref: "./components/authors/authors.yaml"
   /authors/{authorId}:

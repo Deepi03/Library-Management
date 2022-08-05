@@ -1,4 +1,4 @@
-type: object
+type: "object"
 properties:
   isbn:
     type: "string"
@@ -8,8 +8,11 @@ properties:
     type: "string"
   category:
     type: "array"
+    description: "An array of category strings"
     items:
       type: "string"
+  onLoan:
+    type: "boolean"
   authors:
     type: "array"
     description: "An array of authorId strings"
@@ -18,8 +21,5 @@ properties:
   coverpage: # need to have file upload interface in referencing yamls
     type: "string"
     format: binary
-  onLoan:
-    type: "boolean"
-    default: false
 xml:
-  name: "Books"
+  name: "Update Book"

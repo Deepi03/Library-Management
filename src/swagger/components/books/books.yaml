@@ -14,3 +14,22 @@ get:
         $ref: "../schemas/BooksSchema.yaml"
     "400":
       description: "could not display books"
+
+post:
+  tags:
+    - books
+  summary: Create new book
+  description: Creates a single copy of a new book. 
+  produces:
+    - "application/xml"
+    - "application/json"
+  requestBody:
+    required: true
+    content:
+      multipart/form-data:
+        schema:
+          type: "object"
+          $ref: "../schemas/createBookSchema.yaml"
+  responses:
+    201:
+      description: "successfully created book"

@@ -1,0 +1,26 @@
+put:
+  tags:
+    - users
+  summary: "Add book to loan basket"
+  description: "This endpoint allows you to add a book to the loan basket. The loan basket is a property of the user object. It is an array that holds the book ids."
+  produces:
+    - "application/xml"
+    - "application/json"
+  parameters:
+    - in: "path"
+      name: "userId"
+      description: "The mongodb ObjectId for the user. "
+      required: true
+      type: object
+  requestBody:
+    required: true
+    content:
+      "application/json":
+        schema:
+          type: "object"
+          properties:
+            bookId:
+            type: "string"
+  responses:
+    404:
+      description: "Book not found"
