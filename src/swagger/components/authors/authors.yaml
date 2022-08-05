@@ -49,17 +49,7 @@ put:
         $ref: "../schemas/AuthorsSchema.yaml"
     "400":
       decription: Error in submission
-delete:
-      tags:
-        - authors
-      summary: Delete an existing author
-      description:
-        Delete an existing author 
-      responses:
-        "200":
-          description: success
-          schema:
-          $ref: "../schemas/AuthorsSchema.yaml"
+
 
         
  
