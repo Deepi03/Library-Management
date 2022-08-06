@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express"
 import User from "../models/User";
 import jwt  from "jsonwebtoken";
 
-import { CustomError } from "../types/CustomError"
+import { CustomError } from "../types/customError"
 
 
 const authenticateUser = async (req: Request, res: Response, next: NextFunction) => {

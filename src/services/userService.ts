@@ -1,4 +1,4 @@
-import { CustomError } from "../types/CustomError";
+import { CustomError } from "../types/customError";
 import User, { UserDocument } from "../models/User";
 import Book from "../models/Book";
 

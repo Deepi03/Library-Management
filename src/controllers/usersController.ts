@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import User, { UserRole } from "../models/User";
 import userService from "../services/userService";
 import imageService from "../services/imageService";
-import { CustomError } from "../types/CustomError";
+import { CustomError } from "../types/customError";
 import jwt from 'jsonwebtoken'
 
 require('dotenv').config()
