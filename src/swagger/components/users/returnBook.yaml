@@ -1,0 +1,18 @@
+put:
+  tags:
+    - users
+  summary: "Return a book to the library"
+  description: "This endpoint allows you to return a single books currently loaned by the user. This operation removes the books from the 'loans' property of the user."
+  produces:
+    - "application/xml"
+    - "application/json"
+  parameters:
+    - in: "path"
+      name: "userId"
+      description: "The mongodb ObjectId for the user. "
+      required: true
+  responses:
+    200:
+      description: "successful operation"
+    404:
+      description: "User not found"

@@ -1,0 +1,19 @@
+delete:
+  tags:
+  - "books"
+  summary: "Delete single copy of a book"
+  description: "This endpoint allows you to delete a single of a book. You can delete the user by adding bookId(mongodb ObjectId) as a parameter."
+  produces:
+  - "application/xml"
+  - "application/json"
+  parameters:
+    - name: "bookId"
+      in: "path"
+      description: "The bookId is provided as parameter. The bookId is then used to carry out a deleteOne operation"
+      required: true
+      type: "string"
+  responses:
+    "204":
+      description: "Delete copy successful"
+    "404":
+      description: "Book ID not found"

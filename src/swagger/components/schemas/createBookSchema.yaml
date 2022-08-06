@@ -1,4 +1,4 @@
-type: object
+type: "object"
 properties:
   isbn:
     type: "string"
@@ -18,8 +18,5 @@ properties:
   coverpage: # need to have file upload interface in referencing yamls
     type: "string"
     format: binary
-  onLoan:
-    type: "boolean"
-    default: false
 xml:
-  name: "Books"
+  name: "New Book"

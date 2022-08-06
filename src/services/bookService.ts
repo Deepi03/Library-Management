@@ -42,6 +42,10 @@ const createNewBook = async (book: BookDocument) => {
     return await book.save()
 }
 
+const getBookById = async(bookId: string) => {
+    return await Book.find({_id:bookId})
+}
+
 const updateBook = async (update: BookDocument) => {
     try {
         return await Book.updateMany(
@@ -63,7 +67,7 @@ const updateBook = async (update: BookDocument) => {
 }
 
 const getBookByISBN = async (ISBN: string) => {
-    return await Book.find({ isbn: ISBN })
+    return await Book.find({ isbn: ISBN }).select('-__v').populate('authors')
 }
 
 const getBookByTitle = async (bookTitle: string) => {
@@ -111,33 +115,47 @@ const getAllCategories = async () => {
     try {
         return await Book.aggregate([
             {
-            '$project': {
+              '$project': {
                 '_id': 0, 
-                'category': 1
-            }
+                'category': 1, 
+                'title': 2
+              }
             }, {
-            '$unwind': {
-                'path': '$category'
-            }
-            }, {
-            '$group': {
-                '_id': '$category', 
-                'booksCount': {
-                '$sum': 1
+              '$group': {
+                '_id': '$title', 
+                'category': {
+                  '$first': '$category'
                 }
-            }
+              }
             }, {
-            '$project': {
+              '$unwind': {
+                'path': '$category'
+              }
+            }, {
+              '$project': {
+                '_id': 0, 
+                'title': '$_id', 
+                'category': 1
+              }
+            }, {
+              '$group': {
+                '_id': '$category', 
+                'titleCount': {
+                  '$sum': 1
+                }
+              }
+            }, {
+              '$project': {
                 '_id': 0, 
                 'category': '$_id', 
-                'booksCount': 2
-            }
+                'titleCount': 1
+              }
             }, {
-            '$sort': {
-                'category': 1
+                '$sort': {
+                    'category': 1
+                }
             }
-            }
-        ])   
+          ])
     } catch (error) {
         return error
     }
@@ -147,39 +165,67 @@ const getBooksByCategory = async (category: string) => {
     // return await Book.find({ category: category })
     return await Book.aggregate([
         {
-            '$search': {
-                'index': 'categoryIndex',
-                'text': {
-                    'query': category,
-                    'path': {
-                        'wildcard': '*'
-                    }
-                }
+          '$search': {
+            'index': 'categoryIndex', 
+            'text': {
+              'query': category, 
+              'path': {
+                'wildcard': '*'
+              }
             }
-        },{
-            '$project': {
-                '_id': 0, 
-                'isbn': 1, 
-                'title': 2, 
-                'authors': 3, 
-                'category': 4, 
-                'description': 5, 
-                'onLoan': 6
-            }
+          }
         }, {
-            '$lookup': {
-              'from': 'authors', 
-              'localField': 'authors', 
-              'foreignField': '_id', 
-              'as': 'authors'
+          '$project': {
+            '_id': 0, 
+            'isbn': 1, 
+            'title': 2, 
+            'authors': 3, 
+            'category': 4, 
+            'description': 5, 
+            'onLoan': 6
+          }
+        }, {
+          '$group': {
+            '_id': '$isbn', 
+            'title': {
+              '$first': '$title'
+            }, 
+            'description': {
+              '$first': '$description'
+            }, 
+            'authors': {
+              '$first': '$authors'
+            }, 
+            'category': {
+              '$first': '$category'
+            }, 
+            'availableCopies': {
+              '$sum': {
+                '$cond': [
+                  {
+                    '$eq': [
+                      '$onLoan', false
+                    ]
+                  }, 1, 0
+                ]
+              }
             }
+          }
+        }, {
+          '$lookup': {
+            'from': 'authors', 
+            'localField': 'authors', 
+            'foreignField': '_id', 
+            'as': 'authors'
+          }
         }
-    ])
+      ])
 }
 
 export default {
     getAllBooks,
     getBookByISBN,
+    getBookById,
     updateBook,
     getAllCategories,
     getBooksByCategory,

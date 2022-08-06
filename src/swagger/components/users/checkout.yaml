@@ -1,0 +1,19 @@
+put:
+  tags:
+    - users
+  summary: "Checkout books in loan basket"
+  description: "This endpoint allows you to checkout the books currently in the loan basket. This operation moves the books from the loan basket and creates a property loan"
+  produces:
+    - "application/xml"
+    - "application/json"
+  parameters:
+    - in: "path"
+      name: "userId"
+      description: "The mongodb ObjectId for the user. "
+      required: true
+      type: "string"
+  responses:
+    200:
+      description: "successful operation"
+    404:
+      description: "User not found"

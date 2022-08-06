@@ -1,5 +1,4 @@
 import { CustomError } from "../types/CustomError";
-// import { StringDecoder } from "string_decoder";
 import User, { UserDocument } from "../models/User";
 import Book from "../models/Book";
 
@@ -138,9 +137,9 @@ const viewLoans = async(userId: string) => {
     const foundUser = await User.findOne({_id:userId})
     if (foundUser) {
         if (foundUser.loans.length > 0) {
-            return foundUser.loans
+            return foundUser
         } else {
-            return `No books on loan at the moment` 
+            return `No books on loan at the moment`
         }
      } else {
         throw new CustomError(404, `User not found`)

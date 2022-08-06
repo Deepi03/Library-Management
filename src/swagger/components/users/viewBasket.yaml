@@ -1,0 +1,22 @@
+get:
+  tags:
+    - users
+  summary: "View Basket"
+  description: "This endpoint allows you to view the user's loan basket. The loan basket is a property of the user object. It is an array that holds the book ids."
+  parameters:
+    - in: "path"
+      name: "userId"
+      description: "The mongodb ObjectId for the user. "
+      required: true
+      type: "string"
+  produces:
+    - "application/xml"
+    - "application/json"
+  responses:
+    200:
+      description: "successful operation"
+      type: object
+      schema:
+        $ref: "../schemas/reqObjects/LoanBasket"
+    404:
+      description: "User not found"

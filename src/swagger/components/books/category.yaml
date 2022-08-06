@@ -1,12 +1,12 @@
 get:
   tags:
     - "books"
-  summary: "Get all categories"
+  summary: "Get books belonging to a single category"
   description: "Returns a list of categories along with the number of titles under each category"
   parameters:
     - name: "category"
       in: "path"
-      description: "Category name should be provided as a parameter."
+      description: "The name of the category is provided as a parameter."
       required: true
       type: "string"
   produces:
@@ -18,4 +18,4 @@ get:
       schema:
         type: "array"
         items:
-          $ref: "../schemas/categorySchema.yaml"
+          $ref: "../schemas/booksSchema.yaml"

@@ -1,36 +1,25 @@
-get:
+post:
   tags:
     - "users"
   summary: "Logs user into the system"
-  description: ""
-  operationId: "loginUser"
+  description: "You can log into the system using this endpoint."
   produces:
     - "application/xml"
     - "application/json"
-  parameters:
-    - name: "username"
-      in: "query"
-      description: "The user name for login"
-      required: true
-      type: "string"
-    - name: "password"
-      in: "query"
-      description: "The password for login in clear text"
-      required: true
-      type: "string"
+  requestBody:
+    required: true
+    content:
+      "application/json":
+        schema:
+          type: object
+          description: "The ObjectId of the book to be removed from the basket"
+          $ref: "../schemas/loginSchema.yaml"
   responses:
     "200":
       description: "successful operation"
       schema:
         type: "string"
-      headers:
-        X-Rate-Limit:
-          type: "integer"
-          format: "int32"
-          description: "calls per hour allowed by the user"
-        X-Expires-After:
-          type: "string"
-          format: "date-time"
-          description: "date in UTC when token expires"
+        description: Returns the User Object in the form of jwt token
+      
     "400":
       description: "Invalid username/password supplied"

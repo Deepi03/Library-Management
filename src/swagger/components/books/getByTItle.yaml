@@ -1,0 +1,23 @@
+get:
+  tags:
+    - "books"
+  summary: "Search Books by title"
+  description: "Search books in the library by book title"
+  produces:
+    - "application/xml"
+    - "application/json"
+  parameters:
+    - name: "title"
+      in: "path"
+      description: "search term for the book search"
+      required: true
+      type: "string"
+  responses:
+    "200":
+      description: "successful operation"
+      schema:
+        type: "array"
+        items:
+          $ref: "../schemas/BooksSchema.yaml"
+    "400":
+      description: "Invalid book title"

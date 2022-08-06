@@ -1,0 +1,9 @@
+type: object
+properties:
+  category:
+    type: "string"
+  titleCount:
+    type: "integer"
+    format: "int32"
+xml:
+  name: "Category"

@@ -71,20 +71,6 @@ const deleteUserByUserId = async (
   }
 };
 
-const deleteUserByUsername = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const username = req.params.username;
-    await userService.deleteUser(username);
-    return res.status(204).send("User has been deleted by username");
-  } catch (e) {
-    return res.send(e);
-  }
-};
-
 const deleteUserByEmail = async (
   req: Request,
   res: Response,
@@ -172,7 +158,6 @@ export default {
   getUserByEmail,
   postUser,
   createUser,
-  deleteUserByUsername,
   deleteUserByEmail,
   deleteUserByUserId,
   addBookToBasket,

@@ -1,0 +1,42 @@
+get:
+  tags:
+    - "users"
+  summary: "Get user by id which is a mongodb ObjectId"
+  description: ""
+  operationId: "getUserByName"
+  produces:
+    - "application/xml"
+    - "application/json"
+  parameters:
+    - name: "userId"
+      in: "path"
+      description: "The userId which is a mongodb ObjectId that is provided to fetch the user. "
+      required: true
+      type: "string"
+  responses:
+    "200":
+      description: "successful operation"
+      schema:
+        $ref: "../schemas/UsersSchema.yaml"
+    "404":
+      description: "UserId not found"
+
+delete:
+  tags:
+  - "users"
+  summary: "Delete user by id"
+  description: "This is one of the two endpoints in the API to delete users. You can delete the user by adding userId(mongodb ObjectId) as a parameter."
+  produces:
+  - "application/xml"
+  - "application/json"
+  parameters:
+    - name: "userId"
+      in: "path"
+      description: "The userId which is a mongodb ObjectId that is provided to fetch the user and delete. "
+      required: true
+      type: "string"
+  responses:
+    "200":
+      description: "successful operation"
+    "404":
+      description: "User not found"

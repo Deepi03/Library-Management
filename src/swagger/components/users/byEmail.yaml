@@ -1,0 +1,42 @@
+get:
+  tags:
+    - "users"
+  summary: "Get user by email"
+  description: "This endpoint takes email address as parameter and returns the user object."
+  operationId: "getUserByName"
+  produces:
+    - "application/xml"
+    - "application/json"
+  parameters:
+    - name: "userId"
+      in: "path"
+      description: "The email address, which is the primary login detail of a user. "
+      required: true
+      type: "string"
+  responses:
+    "200":
+      description: "successful operation"
+      schema:
+        $ref: "../schemas/UsersSchema.yaml"
+    "404":
+      description: "Email address not found"
+
+delete:
+  tags:
+  - "users"
+  summary: "Delete user by email"
+  description: "This is one of the two endpoints in the API to delete users. You can delete the user by adding email address as a parameter."
+  produces:
+  - "application/xml"
+  - "application/json"
+  parameters:
+    - name: "userId"
+      in: "path"
+      description: "The email address, which is the primary login detail of a user. "
+      required: true
+      type: "string"
+  responses:
+    "200":
+      description: "successful operation"
+    "404":
+      description: "User not found"
