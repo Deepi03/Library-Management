@@ -10,8 +10,8 @@ get:
   responses:
     "200":
       description: success
-      type: array
       schema:
+        type: array
         $ref: "../schemas/AuthorsSchema.yaml"
     "400":
       description: could not display authors
@@ -22,6 +22,13 @@ post:
   summary: Creates a new author
   description: 
     Create a new author by sending an object 
+  requestBody:
+    required: true
+    content:
+      "multipart/form-data":
+        schema:
+          type: "object"
+          $ref: "../schemas/authorsSchema.yaml"
   produces:
     - "application/xml"
     - "application/json"
@@ -32,24 +39,3 @@ post:
         $ref: "../schemas/AuthorsSchema.yaml"
     "400" :
       description: Error in submission
-
-put:
-  tags:
-    - authors
-  summary: Update an existing author
-  description:
-    Update an existing author by sending an object
-  produces:
-    - "application/xml"
-    - "aplication/json"
-  responses:
-    "200":
-      description: success
-      schema: 
-        $ref: "../schemas/AuthorsSchema.yaml"
-    "400":
-      decription: Error in submission
-
-
-        
- 

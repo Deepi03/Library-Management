@@ -1,51 +1,80 @@
+get:
+  tags:
+    - authors
+  summary: Get a single author
+  description: Get single author by providing id as a parameter
+  produces:
+    - application/xml
+    - application/json
+  parameters:
+    - name: authorId
+      in: "path"
+      description: author id 
+      required: true
+      type: string
+  responses:
+    "200":
+      description: success 
+      schema:
+        type: array
+        items:
+          $ref: ../schemas/AuthorsSchema.yaml
+    "400":
+      description: Invalid
 
-    get:
-      tags:
-        - authors
-      summary: Get a single author
-      description: Get single author by providing id as a parameter
-      produces:
-        - application/xml
-        - application/json
-      parameters:
-        - name: authorId
-          in: "path"
-          description: author id 
-          required: true
-          type: string
-      responses:
-        "200":
-          description: success 
-          schema:
-            type: array
-            items:
-              $ref: ../schemas/AuthorsSchema.yaml
-        "400":
-          description: Invalid
+put:
+  tags:
+    - authors
+  summary: Update an existing author
+  description:
+    Update an existing author by sending an object
+  parameters:
+    - name: authorId
+      in: "path"
+      description: author id 
+      required: true
+      type: string
+  requestBody:
+    required: true
+    content:
+      "multipart/form-data":
+        schema:
+          type: "object"
+          $ref: "../schemas/authorsSchema.yaml"
+  produces:
+    - "application/xml"
+    - "aplication/json"
+  responses:
+    "200":
+      description: success
+      schema: 
+        $ref: "../schemas/authorsSchema.yaml"
+    "404":
+      decription: "Author not found"
 
-    delete:
-      tags:
-        - authors
-      summary: delete a single author
-      description: delete single author by providing id as a parameter
-      produces:
-        - application/xml
-        - application/json
-      parameters:
-        - name: authorId
-          in: "path"
-          description: author id 
-          required: true
-          type: string
-      responses:
-        "200":
-          description: success 
-          schema:
-            type: array
-            items:
-              $ref: ../schemas/AuthorsSchema.yaml
-        "400":
-          description: Invalid
+delete:
+  tags:
+    - authors
+  summary: delete a single author
+  description: delete single author by providing id as a parameter
+  produces:
+    - application/xml
+    - application/json
+  parameters:
+    - name: authorId
+      in: "path"
+      description: author id 
+      required: true
+      type: string
+  responses:
+    "200":
+      description: success 
+      schema:
+        type: array
+        items:
+          $ref: ../schemas/AuthorsSchema.yaml
+    "404":
+      description: "Author not found"
     
 
 

@@ -38,7 +38,118 @@ paths:
             $ref: '#/definitions/Book'
         '400':
           description: could not display books
-  '/books/findByISBN/{isbn}':
+    post:
+      tags:
+        - books
+      summary: Create new book
+      description: Creates a single copy of a new book.
+      produces:
+        - application/xml
+        - application/json
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                isbn:
+                  type: string
+                title:
+                  type: string
+                description:
+                  type: string
+                category:
+                  type: array
+                  items:
+                    type: string
+                authors:
+                  type: array
+                  description: An array of authorId strings
+                  items:
+                    type: string
+                coverpage:
+                  type: string
+                  format: binary
+              xml:
+                name: New Book
+      responses:
+        '201':
+          description: successfully created book
+  '/books/:isbn':
+    put:
+      tags:
+        - books
+      summary: Update book
+      description: This endpoint allows you to update the details of all the copies of a book
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: path
+          name: bookId
+          description: The mongodb ObjectId for the book to be updated.
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                isbn:
+                  type: string
+                title:
+                  type: string
+                description:
+                  type: string
+                category:
+                  type: array
+                  description: An array of category strings
+                  items:
+                    type: string
+                onLoan:
+                  type: boolean
+                authors:
+                  type: array
+                  description: An array of authorId strings
+                  items:
+                    type: string
+                coverpage:
+                  type: string
+                  format: binary
+              xml:
+                name: Update Book
+      responses:
+        '200':
+          description: Successfully updated book
+        '404':
+          description: Book not found
+  '/books/getbyId/:bookId':
+    get:
+      tags:
+        - books
+      summary: Find a book by ID
+      description: Returns a single book
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - name: isbn
+          in: path
+          description: ID of book to return
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Book'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Book not found
+  '/books/getbyISBN/:isbn':
     get:
       tags:
         - books
@@ -62,81 +173,70 @@ paths:
           description: Invalid ISBN supplied
         '404':
           description: Book not found
-    put:
+  '/books/getByTitle/:title':
+    get:
       tags:
         - books
-      summary: Updates the borrowing details of book in the library with form data
-      description: ''
-      consumes:
-        - application/x-www-form-urlencoded
+      summary: Search Books by title
+      description: Search books in the library by book title
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - name: title
+          in: path
+          description: search term for the book search
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Book'
+        '400':
+          description: Invalid book title
+  '/books/deleteCopy/:bookId':
+    delete:
+      tags:
+        - books
+      summary: Delete single copy of a book
+      description: This endpoint allows you to delete a single of a book. You can delete the user by adding bookId(mongodb ObjectId) as a parameter.
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - name: bookId
+          in: path
+          description: The bookId is provided as parameter. The bookId is then used to carry out a deleteOne operation
+          required: true
+          type: string
+      responses:
+        '204':
+          description: Delete copy successful
+        '404':
+          description: Book ID not found
+  '/books/deleteBook/:isbn':
+    delete:
+      tags:
+        - books
+      summary: Delete all copies of a book
+      description: This endpoint allows you to delete all copies of a book having the same ISBN. You can delete books by adding 'isbn' as a parameter
       produces:
         - application/xml
         - application/json
       parameters:
         - name: isbn
           in: path
-          description: ISBN of book that needs to be updated
+          description: The string 'isbn' of the books is provided as parameter. The isbn is then used to carry out a deleteMany operation
           required: true
           type: string
-        - name: onLoan
-          in: formData
-          description: 'Updated loan status of a book. if true, the book is on loan'
-          required: true
-          type: boolean
-        - name: borrowedDate
-          in: formData
-          description: the date the book is borrowed by the user
-          required: false
-          type: integer
-          format: date-time
-        - name: returnDate
-          in: formData
-          description: the date the book will be returned by the user
-          required: false
-          type: integer
-          format: date-time
-        - name: borrowerId
-          in: formData
-          description: Identifier for borrower
-          required: false
-          type: integer
-          format: int64
       responses:
-        '200':
-          description: successful operation
-          schema:
-            $ref: '#/definitions/Book'
-        '405':
-          description: Invalid input
-      security:
-        - library_auth:
-            - 'write:books'
-            - 'read:books'
-  '/books/findByTitle/{title}':
-    '/books/findByTitle/{title}':
-      get:
-        tags:
-          - books
-        summary: Search Books by title
-        description: Search books in the library by book title
-        produces:
-          - application/xml
-          - application/json
-        parameters:
-          - name: title
-            in: formData
-            description: search term for the book search
-            required: true
-            type: string
-        responses:
-          '200':
-            description: successful operation
-            schema:
-              type: array
-              items:
-                $ref: '#/definitions/Book'
-          '400':
-            description: Invalid book title
+        '204':
+          description: All copies of the book with the given isbn deleted.
+        '404':
+          description: The book with the ISBN you provided was not found
   /books/onloan:
     get:
       tags:
@@ -146,12 +246,6 @@ paths:
       produces:
         - application/xml
         - application/json
-      parameters:
-        - name: status
-          in: query
-          description: boolean value that holds the borrowing status flag
-          required: true
-          type: boolean
       responses:
         '200':
           description: successful operation
@@ -159,160 +253,154 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Book'
-        '400':
-          description: Invalid status value
-  '/books/categories/{category}':
-    '/books/categories/{category}':
-      get:
-        tags:
-          - books
-        summary: Search Books by category
-        description: sorts all books into corresponding categories and displays the queried category
-        produces:
-          - application/xml
-          - application/json
-        parameters:
-          - name: category
-            in: path
-            description: category the book belongs to
-            required: true
-            type: string
-        responses:
-          '200':
-            description: successful operation
-            schema:
-              type: array
-              items:
-                $ref: '#/definitions/Book'
-          '400':
-            description: Invalid category
-  /users:
-    post:
-      tags:
-        - users
-      summary: Create user
-      description: This can only be done by the logged in user.
-      operationId: createUser
-      produces:
-        - application/xml
-        - application/json
-      parameters:
-        - in: body
-          name: body
-          description: Created user object
-          required: true
-          schema:
-            $ref: '#/definitions/User'
-      responses:
-        default:
-          description: successful operation
-  /users/createWithArray:
-    post:
-      tags:
-        - users
-      summary: Create user
-      description: This can only be done by the logged in user.
-      operationId: createUser
-      produces:
-        - application/xml
-        - application/json
-      parameters:
-        - in: body
-          name: body
-          description: Created user object
-          required: true
-          schema:
-            $ref: '#/definitions/User'
-      responses:
-        default:
-          description: successful operation
-  /users/createWithList:
-    post:
-      tags:
-        - users
-      summary: Creates list of users with given input array
-      description: ''
-      operationId: createUsersWithListInput
-      produces:
-        - application/xml
-        - application/json
-      parameters:
-        - in: body
-          name: body
-          description: List of user object
-          required: true
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/User'
-      responses:
-        default:
-          description: successful operation
-  /users/login:
+  /books/categories:
     get:
       tags:
-        - users
-      summary: Logs user into the system
-      description: ''
-      operationId: loginUser
+        - books
+      summary: Get all categories
+      description: Returns a list of categories along with the number of titles under each category
+      parameters:
+        - name: category
+          in: path
+          description: Category name should be provided as a parameter.
+          required: true
+          type: string
       produces:
         - application/xml
         - application/json
-      parameters:
-        - name: username
-          in: query
-          description: The user name for login
-          required: true
-          type: string
-        - name: password
-          in: query
-          description: The password for login in clear text
-          required: true
-          type: string
       responses:
         '200':
           description: successful operation
           schema:
-            type: string
-          headers:
-            X-Rate-Limit:
-              type: integer
-              format: int32
-              description: calls per hour allowed by the user
-            X-Expires-After:
-              type: string
-              format: date-time
-              description: date in UTC when token expires
-        '400':
-          description: Invalid username/password supplied
-  /users/logout:
+            type: array
+            items:
+              type: object
+              properties:
+                category:
+                  type: string
+                titleCount:
+                  type: integer
+                  format: int32
+              xml:
+                name: Category
+  '/books/categories/:category':
     get:
       tags:
-        - users
-      summary: Logs out current logged in user session
-      description: ''
-      operationId: logoutUser
+        - books
+      summary: Get books belonging to a single category
+      description: Returns a list of categories along with the number of titles under each category
+      parameters:
+        - name: category
+          in: path
+          description: The name of the category is provided as a parameter.
+          required: true
+          type: string
       produces:
         - application/xml
         - application/json
-      parameters: []
       responses:
-        default:
+        '200':
           description: successful operation
-  '/users/{username}':
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                isbn:
+                  type: string
+                title:
+                  type: string
+                description:
+                  type: string
+                category:
+                  type: array
+                  items:
+                    type: string
+                authors:
+                  type: array
+                  description: An array of authorId strings
+                  items:
+                    type: string
+                coverpage:
+                  type: string
+                  format: binary
+                onLoan:
+                  type: boolean
+                  default: false
+              xml:
+                name: Books
+  /users:
     get:
       tags:
         - users
-      summary: Get user by user name
+      summary: Shows all the users
+      description: Returns a list of all the users in the library
+      produces:
+        - application/xml
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          type: object
+          schema:
+            $ref: '#/definitions/User'
+        '400':
+          description: could not display users
+    post:
+      tags:
+        - users
+      summary: Create user
+      description: Create a new user using this POST endpoint
+      produces:
+        - application/xml
+        - application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstname:
+                  type: string
+                  required: true
+                lastname:
+                  type: string
+                  required: true
+                email:
+                  type: string
+                  required: true
+                password:
+                  type: string
+                  required: true
+                phone:
+                  type: string
+                  required: true
+                role:
+                  type: string
+                  default: member
+                avatar:
+                  type: string
+                  format: binary
+              xml:
+                name: User
+      responses:
+        '201':
+          description: successfully created user
+  '/users/:userId':
+    get:
+      tags:
+        - users
+      summary: Get user by id which is a mongodb ObjectId
       description: ''
       operationId: getUserByName
       produces:
         - application/xml
         - application/json
       parameters:
-        - name: username
+        - name: userId
           in: path
-          description: 'The name that needs to be fetched. Use user1 for testing. '
+          description: 'The userId which is a mongodb ObjectId that is provided to fetch the user. '
           required: true
           type: string
       responses:
@@ -320,56 +408,108 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/User'
-        '400':
-          description: Invalid username supplied
         '404':
-          description: User not found
-    put:
-      tags:
-        - users
-      summary: Updated user
-      description: This can only be done by the logged in user.
-      operationId: updateUser
-      produces:
-        - application/xml
-        - application/json
-      parameters:
-        - name: username
-          in: path
-          description: name that need to be updated
-          required: true
-          type: string
-        - in: body
-          name: body
-          description: Updated user object
-          required: true
-          schema:
-            $ref: '#/definitions/User'
-      responses:
-        '400':
-          description: Invalid user supplied
-        '404':
-          description: User not found
+          description: UserId not found
     delete:
       tags:
         - users
-      summary: Delete user
-      description: This can only be done by the logged in user.
-      operationId: deleteUser
+      summary: Delete user by id
+      description: This is one of the two endpoints in the API to delete users. You can delete the user by adding userId(mongodb ObjectId) as a parameter.
       produces:
         - application/xml
         - application/json
       parameters:
-        - name: username
+        - name: userId
           in: path
-          description: The name that needs to be deleted
+          description: 'The userId which is a mongodb ObjectId that is provided to fetch the user and delete. '
           required: true
           type: string
       responses:
-        '400':
-          description: Invalid username supplied
+        '200':
+          description: successful operation
         '404':
           description: User not found
+  '/users/:userId/addtobasket': '$ref:"/components/users/addToBasket.yaml"'
+  '/users/:userId/removefrombasket': '$ref:"/components/users/removeFromBasket.yaml"'
+  '/users/:userId/viewbasket': '$ref:"/components/users/viewBasket.yaml"'
+  '/users/:userId/checkout': '$ref:"/components/users/checkout.yaml"'
+  '/users/:userId/viewloans': '$ref:"/components/users/viewLoans.yaml"'
+  '/users/:userId/returnbook': '$ref:"/components/users/returnBook.yaml"'
+  '/users/:email':
+    get:
+      tags:
+        - users
+      summary: Get user by email
+      description: This endpoint takes email address as parameter and returns the user object.
+      operationId: getUserByName
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - name: userId
+          in: path
+          description: 'The email address, which is the primary login detail of a user. '
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/User'
+        '404':
+          description: Email address not found
+    delete:
+      tags:
+        - users
+      summary: Delete user by email
+      description: This is one of the two endpoints in the API to delete users. You can delete the user by adding email address as a parameter.
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - name: userId
+          in: path
+          description: 'The email address, which is the primary login detail of a user. '
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: User not found
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Logs user into the system
+      description: You can log into the system using this endpoint.
+      produces:
+        - application/xml
+        - application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: The ObjectId of the book to be removed from the basket
+              properties:
+                email:
+                  type: string
+                  required: true
+                password:
+                  type: string
+                  required: true
+              xml:
+                name: Login Object
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: string
+            description: Returns the User Object in the form of jwt token
+        '400':
+          description: Invalid username/password supplied
   /authors:
     get:
       tags:
@@ -382,16 +522,23 @@ paths:
       responses:
         '200':
           description: success
-          type: array
           schema:
+            type: array
             $ref: '#/definitions/Author'
         '400':
           description: could not display authors
     post:
       tags:
         - authors
-      summary: Create a new author
+      summary: Creates a new author
       description: Create a new author by sending an object
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              $ref: '#/paths/~1authors~1%3AauthorId/put/responses/200/schema'
       produces:
         - application/xml
         - application/json
@@ -402,37 +549,12 @@ paths:
             $ref: '#/definitions/Author'
         '400':
           description: Error in submission
-    put:
-      tags:
-        - authors
-      summary: Update an existing author
-      description: Update an existing author by sending an object
-      produces:
-        - application/xml
-        - aplication/json
-      responses:
-        '200':
-          description: success
-          schema:
-            $ref: '#/definitions/Author'
-        '400':
-          decription: Error in submission
-    delete:
-      tags:
-        - authors
-      summary: Delete an existing author
-      description: Delete an existing author
-      responses:
-        '200':
-          description: success
-          schema: null
-          $ref: '#/definitions/Author'
-  '/authors/{authorId}':
+  '/authors/:authorId':
     get:
       tags:
         - authors
       summary: Get a single author
-      description: Get a single author by adding id as a parameter
+      description: Get single author by providing id as a parameter
       produces:
         - application/xml
         - application/json
@@ -451,6 +573,67 @@ paths:
               $ref: '#/definitions/Author'
         '400':
           description: Invalid
+    put:
+      tags:
+        - authors
+      summary: Update an existing author
+      description: Update an existing author by sending an object
+      parameters:
+        - name: authorId
+          in: path
+          description: author id
+          required: true
+          type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              $ref: '#/paths/~1authors~1%3AauthorId/put/responses/200/schema'
+      produces:
+        - application/xml
+        - aplication/json
+      responses:
+        '200':
+          description: success
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+              firstname:
+                type: string
+              lastname:
+                type: string
+              avatar:
+                type: string
+                format: binary
+        '404':
+          decription: Author not found
+    delete:
+      tags:
+        - authors
+      summary: delete a single author
+      description: delete single author by providing id as a parameter
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - name: authorId
+          in: path
+          description: author id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Author'
+        '404':
+          description: Author not found
   '/authors/{authorId}/books':
     get:
       tags:
@@ -486,32 +669,30 @@ definitions:
       description:
         type: string
       category:
+        type: array
+        items:
+          type: string
+      authors:
+        type: array
+        description: An array of authorId strings
+        items:
+          type: string
+      coverpage:
         type: string
+        format: binary
       onLoan:
         type: boolean
-        default: true
-      borrowedDate:
-        type: string
-        format: date-time
-      returnDate:
-        type: string
-        format: date-time
-      borrowerId:
-        type: integer
-        format: int64
+        default: false
     xml:
       name: Books
   User:
     type: object
     properties:
       id:
-        type: integer
-        format: int64
-      username:
         type: string
-      firstName:
+      firstname:
         type: string
-      lastName:
+      lastname:
         type: string
       email:
         type: string
@@ -519,10 +700,21 @@ definitions:
         type: string
       phone:
         type: string
-      userStatus:
-        type: integer
-        format: int32
-        description: User Status
+      role:
+        type: string
+      avatar:
+        type: string
+        format: binary
+      loanBasket:
+        type: array
+        description: An array of bookId strings
+        items:
+          type: string
+      loans:
+        type: array
+        description: An array of bookId strings
+        items:
+          type: string
     xml:
       name: User
   Author:
@@ -530,8 +722,13 @@ definitions:
     properties:
       id:
         type: string
-      name:
+      firstname:
         type: string
+      lastname:
+        type: string
+      avatar:
+        type: string
+        format: binary
 securityDefinitions:
   BasicAuth:
     type: http

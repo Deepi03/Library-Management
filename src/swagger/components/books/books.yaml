@@ -11,7 +11,7 @@ get:
       description: "successful operation"
       type: array
       schema:
-        $ref: "../schemas/BooksSchema.yaml"
+        $ref: "../schemas/booksSchema.yaml"
     "400":
       description: "could not display books"
 

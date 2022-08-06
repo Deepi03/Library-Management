@@ -11,6 +11,7 @@ usersRoute.post('', usersController.createUser)
 
 usersRoute.get('/:userId', usersController.getSingleUser)
 usersRoute.delete('/:userId', usersController.deleteUserByUserId)
+
 usersRoute.put('/:userId/addtobasket', usersController.addBookToBasket)
 usersRoute.put('/:userId/removefrombasket', usersController.deleteBookFromBasket)
 usersRoute.get('/:userId/viewbasket', usersController.viewUserBasket)

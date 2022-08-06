@@ -25,24 +25,27 @@ tags:
 paths:
   /books:
     $ref: "./components/books/books.yaml"
-  /books/getbyId/:isbn:
-    $ref: "./components/books/findByISBN.yaml"
+  /books/:isbn: 
+    $ref: "./components/books/updateBook.yaml"
+  /books/getbyId/:bookId:
+    $ref: "./components/books/getById.yaml"
+  /books/getbyISBN/:isbn:
+    $ref: "./components/books/getByISBN.yaml"
   /books/getByTitle/:title:
-    $ref: "./components/books/findByTitle.yaml"
+    $ref: "./components/books/getByTitle.yaml"
   /books/deleteCopy/:bookId:
     $ref: "./components/books/deleteCopy.yaml"
   /books/deleteBook/:isbn:
     $ref: "./components/books/deleteBook.yaml"
   /books/onloan:
     $ref: "./components/books/onloan.yaml"
-  /books/categories/{category}:
+  /books/categories:
     $ref: "./components/books/categories.yaml"
+  /books/categories/:category:
+    $ref: "./components/books/category.yaml"
   
   /users:
     $ref: "./components/users/users.yaml"
-  /users/login:
-    $ref: "./components/users/login.yaml"
-
   /users/:userId:
     $ref: "./components/users/byUserId.yaml"
   /users/:userId/addtobasket:
@@ -57,13 +60,15 @@ paths:
     $ref:"/components/users/viewLoans.yaml"
   /users/:userId/returnbook:
     $ref:"/components/users/returnBook.yaml"
-  
   /users/:email:
     $ref: "./components/users/byEmail.yaml"
+  /users/login:
+    $ref: "./components/users/login.yaml"
+
   
   /authors:
     $ref: "./components/authors/authors.yaml"
-  /authors/{authorId}:
+  /authors/:authorId:
     $ref: "./components/authors/singleAuthor.yaml"
   /authors/{authorId}/books:
     $ref: "./components/authors/getAllBooksByAuthor.yaml"
