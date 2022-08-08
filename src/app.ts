@@ -17,7 +17,7 @@ import { jwtStrategy, googleStrategy } from "./config/passport";
 require("dotenv").config();
 
 const app = express();
-app.set("port", 8080);
+app.set("port", process.env.PORT);
 
 const user = {
   userName: "Milo",
