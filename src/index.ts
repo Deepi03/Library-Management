@@ -8,7 +8,7 @@ const password = process.env.MONGODB_PASS
 const cluster = process.env.MONGODB_CLUSTER
 const database = process.env.MONGODB_DATABASE
 
-let uri = `mongodb+srv://${username}:${password}@${cluster}/${database}?retryWrites=true&w=majority`;
+// let uri = `mongodb+srv://${username}:${password}@${cluster}/${database}?retryWrites=true&w=majority`;
 
 app.listen(app.get('port'), () => console.log(`app is up and running in port ${ app.get('port') }`))
 
