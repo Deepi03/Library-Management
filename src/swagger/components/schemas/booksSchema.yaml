@@ -15,11 +15,11 @@ properties:
     description: "An array of authorId strings"
     items:
       type: "string"
-  coverpage: # need to have file upload interface in referencing yamls
-    type: "string"
-    format: binary
-  onLoan:
-    type: "boolean"
-    default: false
+  availableCopies:
+    type: "number"
+# coverpage: # need to have file upload interface in referencing yamls
+  #   type: "string"
+  #   format: binary
+  
 xml:
   name: "Books"

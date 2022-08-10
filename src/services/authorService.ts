@@ -27,7 +27,6 @@ const createAuthor = async (author: AuthorDocument) => {
 const updateAuthor = async (author: AuthorDocument) => {
   const foundAuthor = await Author.findById(author._id);
   if (foundAuthor) {
-    console.log("author service update author", foundAuthor);
     return await foundAuthor.updateOne({
       firstname: author.firstname,
       lastname: author.lastname,

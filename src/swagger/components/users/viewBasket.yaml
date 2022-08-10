@@ -17,6 +17,6 @@ get:
       description: "successful operation"
       type: object
       schema:
-        $ref: "../schemas/reqObjects/LoanBasket"
+        $ref: "../schemas/LoanBasketSchema.yaml"
     404:
       description: "User not found"

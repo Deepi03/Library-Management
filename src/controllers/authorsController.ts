@@ -63,15 +63,12 @@ const updateAuthor = async(req:Request,res:Response,next:NextFunction) =>{
       );
      
       const updatedAuthor = await authorService.updateAuthor(author)
-      console.log(updatedAuthor)
       return res.status(201).json(updatedAuthor);
     } 
   } catch(e){
      return next(e)
       }
 }
-
-
 
 const deleteAuthor = async (req: Request, res: Response, next: NextFunction) => {
     try {

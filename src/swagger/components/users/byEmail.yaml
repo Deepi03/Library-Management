@@ -3,12 +3,8 @@ get:
     - "users"
   summary: "Get user by email"
   description: "This endpoint takes email address as parameter and returns the user object."
-  operationId: "getUserByName"
-  produces:
-    - "application/xml"
-    - "application/json"
   parameters:
-    - name: "userId"
+    - name: "email"
       in: "path"
       description: "The email address, which is the primary login detail of a user. "
       required: true
@@ -26,11 +22,10 @@ delete:
   - "users"
   summary: "Delete user by email"
   description: "This is one of the two endpoints in the API to delete users. You can delete the user by adding email address as a parameter."
-  produces:
-  - "application/xml"
-  - "application/json"
+  security:
+    - token: []
   parameters:
-    - name: "userId"
+    - name: "email"
       in: "path"
       description: "The email address, which is the primary login detail of a user. "
       required: true

@@ -1,9 +1,11 @@
 type: object
 properties:
   category:
-    type: "string"
+    type: string
+    example: fiction
   titleCount:
-    type: "integer"
-    format: "int32"
+    type: integer
+    format: int32
+    example: 8
 xml:
   name: "Category"

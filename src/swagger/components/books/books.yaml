@@ -3,33 +3,26 @@ get:
     - books
   summary: Shows all the books
   description: Returns a list of all the books in the library
-  produces:
-    - "application/xml"
-    - "application/json"
   responses:
     "200":
       description: "successful operation"
-      type: array
-      schema:
-        $ref: "../schemas/booksSchema.yaml"
-    "400":
-      description: "could not display books"
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/booksSchema.yaml'
 
 post:
   tags:
     - books
   summary: Create new book
-  description: Creates a single copy of a new book. 
-  produces:
-    - "application/xml"
-    - "application/json"
+  description: Creates a single copy of a new book. ATTENTION!! The author needs to be created before a book is created. The authors field is required and it only accepts authorId (mongodb ObjectId).
   requestBody:
+    description: Book to be created
     required: true
     content:
-      multipart/form-data:
+       multipart/form-data:
         schema:
-          type: "object"
-          $ref: "../schemas/createBookSchema.yaml"
+          $ref: '../schemas/createBookSchema.yaml'
   responses:
     201:
       description: "successfully created book"

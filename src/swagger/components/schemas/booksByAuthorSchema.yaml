@@ -1,0 +1,15 @@
+type: object
+properties:
+  title:
+    type: string
+  isbn:
+    type: string
+  description:
+    type: string
+  category:
+    type: array
+    items:
+      type: string
+  availableCopies:
+    type: integer
+    format: int32

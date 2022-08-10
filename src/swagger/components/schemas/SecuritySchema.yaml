@@ -1,13 +1,6 @@
 BasicAuth:
   type: http
   scheme: basic
-BearerAuth:
-  type: http
-  scheme: bearer
-ApiKeyAuth:
-  type: apiKey
-  in: header
-  name: X-API-Key
 OAuth2:
   type: oauth2
   flows:

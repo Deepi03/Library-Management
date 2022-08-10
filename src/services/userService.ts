@@ -1,14 +1,21 @@
 import { CustomError } from "../types/customError";
 import User, { UserDocument } from "../models/User";
 import Book from "../models/Book";
+import mongoose from "mongoose";
 
+const { ObjectId } = require('mongodb')
 
 const getAllUsers = async () => {
     return await User.find()
 }
 
-const getUserByEmail = async (email: string): Promise <UserDocument|null> => {
-    return await User.findOne({ email: email })
+const getUserByEmail = async (emailId: string): Promise <UserDocument|null|any> => {
+    try {
+        const foundUser = await User.findOne({email:emailId})
+        return foundUser
+    } catch (error) {
+        return error
+    }
 }
 
 const getSingleUser = async (userId: string) => {
@@ -19,8 +26,7 @@ try {
     }
     return foundUser
 } catch (error) {
-    console.log(error)
-    return   
+    return error
 }
 }
 
@@ -28,7 +34,7 @@ const createUser = async(user: UserDocument) => {
     return await user.save()
 }
 
-const deleteUser = async (userId: string) => {
+const deleteUserById = async (userId: string) => {
     const foundUser = await User.findById(userId)
     if (foundUser) {
         return await User.findByIdAndDelete(userId)
@@ -38,53 +44,75 @@ const deleteUser = async (userId: string) => {
 }
 
 const deleteUserByEmail = async (email: string) => {
-    const foundUser = await User.findOne({ email: String})
+    const foundUser = await User.findOne({ email: email})
     if (foundUser) {
-        return await User.findOneAndDelete({ email: String })
+        return await User.findOneAndDelete({ email: email })
     } else {
         throw new CustomError(404, "User not found")
     }
 }
     
 const addBookToBasket = async (userId: string, bookId: string) => {
-    try {
-        const foundUser = await User.findOne({_id:userId})
-        if (foundUser) {
-            return await User.updateOne(
-                {_id:userId},
-                {$push: {'loanBasket': bookId}}
-                )
+    const session = await mongoose.startSession()
+    await session.withTransaction(async () => {
+        try {
+            const foundUser = await User.findOne({_id:userId})
+            if (foundUser) {
+                const foundBook = await Book.findOne({_id:bookId})
+                // console.log(foundBook)
+                if(foundBook?.onLoan === true){
+                    throw new CustomError(400, "This copy of the book is already on loan. Please pick another copy")
+                } else {
+                    await Book.updateOne(
+                        {_id:bookId},
+                        {$set: {onLoan: true}})
+                    await User.updateOne(
+                        {_id:userId},
+                        {$push: {'loanBasket': new ObjectId(bookId)}}
+                        )
+                }
             } else {
-            throw new CustomError(404, `User not found`)
+                throw new CustomError(404, `User not found`)
+            }
+            await session.commitTransaction()
+        } catch (error) {
+            console.log(error)
+            session.abortTransaction()
         }
-    } catch (error) {
-        return error
-    }
+    })
 }
 
 const deleteBookFromBasket = async (userId: string, bookId: string) => {
-    try {
-        const foundUser = await User.findOne({_id:userId})
-        if (foundUser) {
-            return await User.updateOne(
-                {_id:userId},
-                {$pull: {'loanBasket': bookId}}
-                )
-            } else {
-            throw new CustomError(404, `User not found`)
+    const session = await mongoose.startSession()
+    await session.withTransaction(async () => {
+        try {
+            const foundUser = await User.findOne({_id:userId})
+            if (foundUser) {
+                await Book.updateOne(
+                    {_id:bookId},
+                    {$set: {onLoan: false}})
+                await User.updateOne(
+                    {_id:userId},
+                    {$pull: {'loanBasket': new ObjectId(bookId)}}
+                    )
+                } else {
+                throw new CustomError(404, `User not found`)
+            }
+            await session.commitTransaction()
+        } catch (error) {
+            console.log(error)
+            session.abortTransaction()
         }
-    } catch (error) {
-        return error
-    }
+    })
 }
 
 const viewUserBasket = async (userId: string) => {
     try {
         const foundUser = await User.findOne({_id:userId})
         if (foundUser) {
-            return await User.find(
-                {_id:userId}
-                ).select('firstname lastname loanBasket -_id')
+            return await User.find({_id:userId})
+            .select('firstname lastname loanBasket -_id')
+            .populate('loanBasket')
             } else {
             throw new CustomError(404, `User not found`)
         }
@@ -137,7 +165,9 @@ const viewLoans = async(userId: string) => {
     const foundUser = await User.findOne({_id:userId})
     if (foundUser) {
         if (foundUser.loans.length > 0) {
-            return foundUser
+            return await User.find({_id:userId})
+            .select('firstname lastname loans -_id')
+            .populate('loans.bookId loans.bookId.authors')
         } else {
             return `No books on loan at the moment`
         }
@@ -172,7 +202,7 @@ export default {
     getUserByEmail,
     getSingleUser,
     createUser,
-    deleteUser,
+    deleteUserById,
     deleteUserByEmail,
     addBookToBasket,
     deleteBookFromBasket,

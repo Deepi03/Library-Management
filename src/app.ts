@@ -17,7 +17,7 @@ import { jwtStrategy, googleStrategy } from "./config/passport";
 require("dotenv").config();
 
 const app = express();
-app.set("port", process.env.PORT);
+app.set("port", process.env.PORT || 5000);
 
 const user = {
   userName: "Milo",
@@ -53,7 +53,7 @@ const swaggerDocument = YAML.load(
 app.set("views", path.join(__dirname, "../views"));
 app.set("view engine", "jade");
 
-app.use("/", homeRoute);
+// app.use("/", homeRoute);
 app.use("/books", booksRoute);
 app.use("/users", usersRoute);
 app.use("/authors", authorsRoute);
@@ -66,7 +66,7 @@ app.get("/about", (req: Request, res: Response) => {
 
 //Add swagger router
 app.use(
-  "/api",
+  "/",
   swaggerUi.serve,
   swaggerUi.setup(swaggerDocument, {
     explorer: true

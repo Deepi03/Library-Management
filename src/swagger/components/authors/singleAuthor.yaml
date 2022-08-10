@@ -41,11 +41,8 @@ put:
         schema:
           type: "object"
           $ref: "../schemas/authorsSchema.yaml"
-  produces:
-    - "application/xml"
-    - "aplication/json"
   responses:
-    "200":
+    "201":
       description: success
       schema: 
         $ref: "../schemas/authorsSchema.yaml"
@@ -57,9 +54,6 @@ delete:
     - authors
   summary: delete a single author
   description: delete single author by providing id as a parameter
-  produces:
-    - application/xml
-    - application/json
   parameters:
     - name: authorId
       in: "path"
@@ -67,7 +61,7 @@ delete:
       required: true
       type: string
   responses:
-    "200":
+    "201":
       description: success 
       schema:
         type: array

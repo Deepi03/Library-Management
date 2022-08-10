@@ -3,9 +3,6 @@ put:
     - users
   summary: "Add book to loan basket"
   description: "This endpoint allows you to add a book to the loan basket. The loan basket is a property of the user object. It is an array that holds the book ids."
-  produces:
-    - "application/xml"
-    - "application/json"
   parameters:
     - in: "path"
       name: "userId"
@@ -16,11 +13,12 @@ put:
     required: true
     content:
       "application/json":
+        description: Provide the bookId here. One unique id can only be added once. Trying to add the same book more than once is not possible.
         schema:
           type: "object"
           properties:
             bookId:
-            type: "string"
+              type: "string"
   responses:
     404:
       description: "Book not found"

@@ -15,7 +15,7 @@ properties:
     description: "An array of authorId strings"
     items:
       type: "string"
-  coverpage: # need to have file upload interface in referencing yamls
+  coverPage: # need to have file upload interface in referencing yamls
     type: "string"
     format: binary
 xml:

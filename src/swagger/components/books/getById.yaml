@@ -7,9 +7,9 @@ get:
     - "application/xml"
     - "application/json"
   parameters:
-    - name: "isbn"
+    - name: "bookId"
       in: "path"
-      description: "ID of book to return"
+      description: "The _id of the book (mongodb ObjectId)"
       required: true
       type: "string"
   responses:
