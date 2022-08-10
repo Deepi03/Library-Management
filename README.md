@@ -9,12 +9,14 @@ In our API we have three main routes
 - Books
 - Authors
 
-More details can be viewed in our swagger (link to UPDATED swagger)
+More details can be viewed in our [swagger documentation](https://fs11-bep-avinash.herokuapp.com/)
 
 ## Tech Stach
 - Express
+- Jest
 - Mongodb
-- Node.js, Typescript
+- Node.js
+- Typescript
 
 ## Team Members
 - Deepika Malini Rajsekar @Deepi03
