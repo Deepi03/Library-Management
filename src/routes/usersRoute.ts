@@ -19,8 +19,8 @@ usersRoute.put('/:userId/checkout', usersController.checkoutBasket)
 usersRoute.get('/:userId/viewloans', usersController.viewLoans)
 usersRoute.put('/:userId/returnbook', usersController.returnBook)
 
-usersRoute.get('/:email', usersController.getUserByEmail)
-usersRoute.delete('/:email', usersController.deleteUserByEmail)
+usersRoute.get('/email/:email', usersController.getUserByEmail)
+usersRoute.delete('/email/:email', passport.authenticate('jwt'), usersMiddleware.verifyAdmin, usersController.deleteUserByEmail)
 
 usersRoute.post('/login', usersMiddleware.authenticateUser, usersController.userLogin) // this will take email,pwd and return a token
 // usersRoute.post('/auth', passport.authenticate('google', {scope: ['profile']}), usersController.userLogin)

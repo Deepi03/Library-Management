@@ -3,9 +3,6 @@ delete:
   - "books"
   summary: "Delete all copies of a book"
   description: "This endpoint allows you to delete all copies of a book having the same ISBN. You can delete books by adding 'isbn' as a parameter"
-  produces:
-  - "application/xml"
-  - "application/json"
   parameters:
     - name: "isbn"
       in: "path"

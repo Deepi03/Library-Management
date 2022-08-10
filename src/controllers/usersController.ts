@@ -14,7 +14,6 @@ const userLogin = (req: Request, res: Response) => {
   return res.json(token)
 }
 
-
 const getAllUsers = async (req: Request, res: Response) => {
   const users = await userService.getAllUsers();
   return res.json(users);
@@ -26,12 +25,10 @@ const getSingleUser = async (req: Request, res: Response) => {
   return res.json(foundUser);
 };
 
-const getUserByEmail = (req: Request, res: Response) => {
-  const userEmail = req.params.userEmail;
-  res.send({
-    message: `You are at viewing the details of User by email: ${userEmail}`,
-    status: 200,
-  });
+const getUserByEmail = async (req: Request, res: Response) => {
+  const  email  = req.params.email
+  const foundUser = await userService.getUserByEmail(email)
+  return res.json(foundUser)
 };
 
 const postUser = (req: Request, res: Response) => {
@@ -64,8 +61,8 @@ const deleteUserByUserId = async (
 ) => {
   try {
     const userId = req.params.userId;
-    await userService.deleteUser(userId);
-    return res.status(204).send("User has been deleted by Id");
+    const deletedUser = await userService.deleteUserById(userId);
+    return res.status(204).json(deletedUser);
   } catch (e) {
     return next(e);
   }
@@ -78,8 +75,8 @@ const deleteUserByEmail = async (
 ) => {
   try {
     const email = req.params.email;
-    await userService.deleteUserByEmail(email);
-    return res.status(204).send("User has been deleted by email");
+    const deletedUser = await userService.deleteUserByEmail(email);
+    return res.status(204).json(deletedUser);
   } catch (e) {
     return next(e);
   }

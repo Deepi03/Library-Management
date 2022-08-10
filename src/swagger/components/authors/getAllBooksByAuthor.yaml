@@ -12,12 +12,12 @@ get:
       description: author id
       required: true
       type: string
-responses:
-  "200":
-    description: success
-    schema:
-      type: array
-      items:
-        $ref: ../schemas/AuthorsSchema.yaml
-  "400":
-    description: Invalid
+  responses:
+    "200":
+      description: success
+      schema:
+        type: array
+        items:
+          $ref: ../schemas/booksSchema.yaml
+    "400":
+      description: Invalid

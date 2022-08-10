@@ -3,16 +3,13 @@ post:
     - "users"
   summary: "Logs user into the system"
   description: "You can log into the system using this endpoint."
-  produces:
-    - "application/xml"
-    - "application/json"
   requestBody:
     required: true
     content:
       "application/json":
         schema:
           type: object
-          description: "The ObjectId of the book to be removed from the basket"
+          description: "The login details of a user. This will return a jwt token"
           $ref: "../schemas/loginSchema.yaml"
   responses:
     "200":

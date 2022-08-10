@@ -13,7 +13,7 @@ export interface UserDocument extends Document{
     avatar: string,
     role: UserRole,
     loans: Object[],
-    loanBasket: string[]
+    loanBasket: ObjectId[]
 }
 
 const userSchema = new Schema<UserDocument>({
@@ -58,8 +58,8 @@ const userSchema = new Schema<UserDocument>({
     loans: [
         {
             bookId: {
-                type: String,
-                required: true
+                type: Schema.Types.ObjectId,
+                ref: 'Book'
             },
             borrowDate: {
                 type: String,
@@ -73,11 +73,10 @@ const userSchema = new Schema<UserDocument>({
     ],
 
     loanBasket: [
-            {
-                type: String,
-                required: true,
-                unique: true
-            }
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Book'
+        }
     ]
 })
 

@@ -2,27 +2,22 @@ get:
   tags:
     - users
   summary: Shows all the users
-  description: Returns a list of all the users in the library
-  produces:
-    - "application/xml"
-    - "application/json"
+  description: Returns a list of all the users in the library. This operation requires admin login. Please login first using the users/login route to recieve a token. This token can then be supplied through the 'Authorize' button on the top right of this page.
+  security:
+    - token: []
   responses:
     200:
       description: "successful operation"
-      type: object
-      schema:
-        $ref: "../schemas/UsersSchema.yaml"
     400:
       description: "could not display users"
+    401:
+      description: "Unauthorized. Invalid Token. You must be an admin to perform this operation"
 
 post:
   tags:
     - users
   summary: "Create user"
-  description: "Create a new user using this POST endpoint"
-  produces:
-    - "application/xml"
-    - "application/json"
+  description: "Create a new user using this POST endpoint."
   requestBody:
     required: true
     content:
@@ -30,6 +25,11 @@ post:
         schema:
           type: "object"
           $ref: "../schemas/createUserSchema.yaml"
+      multipart/form-data:
+        schema:
+          type: "object"
+          $ref: "../schemas/createUserSchema.yaml"
+        
   responses:
     201:
       description: "successfully created user"

@@ -8,18 +8,16 @@ put:
     - "application/json"
   parameters:
     - in: "path"
-      name: "bookId"
-      description: "The mongodb ObjectId for the book to be updated."
+      name: "isbn"
+      description: "The ISBN for the book to be updated."
       required: true
   requestBody:
+    description: Book to be updated
     required: true
     content:
-      "application/json":
+       multipart/form-data:
         schema:
-          type: "object"
-          $ref: "../schemas/updateBookSchema.yaml"
+          $ref: '../schemas/updateBookSchema.yaml'
   responses:
-    200:
+    201:
       description: "Successfully updated book"
-    404:
-      description: "Book not found"

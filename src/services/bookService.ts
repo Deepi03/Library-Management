@@ -39,11 +39,20 @@ const getAllBooks = async () => {
 }
 
 const createNewBook = async (book: BookDocument) => {
+  try {
     return await book.save()
+  } catch (error) {
+    return error
+  }
 }
 
 const getBookById = async(bookId: string) => {
-    return await Book.find({_id:bookId})
+  try {
+    return await Book.findById(bookId)
+  } catch (error) {
+    return error
+  }
+    
 }
 
 const updateBook = async (update: BookDocument) => {

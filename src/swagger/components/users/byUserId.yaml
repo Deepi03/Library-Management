@@ -4,15 +4,11 @@ get:
   summary: "Get user by id which is a mongodb ObjectId"
   description: ""
   operationId: "getUserByName"
-  produces:
-    - "application/xml"
-    - "application/json"
   parameters:
     - name: "userId"
       in: "path"
       description: "The userId which is a mongodb ObjectId that is provided to fetch the user. "
       required: true
-      type: "string"
   responses:
     "200":
       description: "successful operation"

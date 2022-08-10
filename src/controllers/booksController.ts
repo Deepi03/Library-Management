@@ -57,7 +57,7 @@ const getBookByTitle = async(req: Request, res: Response) => {
 
 const getBookById = async(req: Request, res: Response) => {
     try {
-        const bookId = req.params.booksIndex
+        const bookId = req.params.bookId
         const foundBook = await bookService.getBookById(bookId)
         return res.json(foundBook)
     } catch (error) {

@@ -4,9 +4,6 @@ get:
   summary: Shows all the authors
   description: 
     Returns a list of all the authors in the library
-  produces:
-    - "application/xml"
-    - "application/json"
   responses:
     "200":
       description: success
@@ -25,15 +22,11 @@ post:
   requestBody:
     required: true
     content:
-      "multipart/form-data":
+      multipart/form-data:
         schema:
-          type: "object"
           $ref: "../schemas/authorsSchema.yaml"
-  produces:
-    - "application/xml"
-    - "application/json"
   responses:
-    "200":
+    "201":
       description: success
       schema:
         $ref: "../schemas/AuthorsSchema.yaml"
