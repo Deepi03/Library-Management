@@ -3,38 +3,56 @@ import { CustomError } from "../types/customError"
 
 const getAllBooks = async () => {
     return await Book.aggregate([
-        {
-            '$project': {
-                '_id': 0, 
-                'isbn': 1, 
-                'title': 2, 
-                'authors': 3, 
-                'category': 4, 
-                'description': 5, 
-                'onLoan': 6
-            }
-        }, 
-        {
-            '$group': {
-                '_id': '$isbn', 
-                'title': { '$first': '$title' }, 
-                'description': { '$first': '$description' }, 
-                'authors': { '$first': '$authors' }, 
-                'category': { '$first': '$category' }, 
-                'availableCopies': {
-                    '$sum': {
-                        '$cond': [{ '$eq': [ '$onLoan', false ]}, 1, 0]
-                    }
-                }
-            }
-        }, {
-            '$lookup': {
-              'from': 'authors', 
-              'localField': 'authors', 
-              'foreignField': '_id', 
-              'as': 'authors'
-            }
+      {
+        '$project': {
+          '_id': 0, 
+          '__v': 0
         }
+      }, {
+        '$group': {
+          '_id': '$isbn', 
+          'title': {
+            '$first': '$title'
+          }, 
+          'description': {
+            '$first': '$description'
+          }, 
+          'authors': {
+            '$first': '$authors'
+          }, 
+          'category': {
+            '$first': '$category'
+          }, 
+          'availableCopies': {
+            '$sum': {
+              '$cond': [
+                {
+                  '$eq': [
+                    '$onLoan', false
+                  ]
+                }, 1, 0
+              ]
+            }
+          }
+        }
+      }, {
+        '$project': {
+          '_id': 0, 
+          'isbn': '$_id', 
+          'title': 1, 
+          'authors': 1, 
+          'category': 1, 
+          'description': 1, 
+          'availableCopies': 1
+        }
+      }, {
+        '$lookup': {
+          'from': 'authors', 
+          'localField': 'authors', 
+          'foreignField': '_id', 
+          'as': 'authors'
+        }
+      }
     ])
 }
 
@@ -185,13 +203,8 @@ const getBooksByCategory = async (category: string) => {
           }
         }, {
           '$project': {
-            '_id': 0, 
-            'isbn': 1, 
-            'title': 2, 
-            'authors': 3, 
-            'category': 4, 
-            'description': 5, 
-            'onLoan': 6
+            '_id': 0,
+            '__v': 0
           }
         }, {
           '$group': {

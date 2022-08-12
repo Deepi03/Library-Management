@@ -57,20 +57,7 @@ const getBooksByAuthor = async (authorId: string) => {
       }, {
         '$project': {
           '_id': 0, 
-          'isbn': 1, 
-          'title': 2, 
-          'authors': 3, 
-          'category': 4, 
-          'description': 5, 
-          'onLoan': 6
-        }
-      }, {
-        '$unwind': {
-          'path': '$authors'
-        }
-      }, {
-        '$match': {
-          'authors': new ObjectId(authorId)
+          '__v': 0
         }
       }, {
         '$group': {
@@ -87,21 +74,31 @@ const getBooksByAuthor = async (authorId: string) => {
           'category': {
             '$first': '$category'
           }, 
+          'authors': {
+            '$first': '$authors'
+          }, 
           'availableCopies': {
             '$sum': {
-              '$cond': [{ '$eq': ['$onLoan', false]}, 1, 0]
+              '$cond': [
+                {
+                  '$eq': [
+                    '$onLoan', false
+                  ]
+                }, 1, 0
+              ]
             }
           }
         }
       }, {
         '$project': {
-          '_id': 0, 
-          'isbn': 1, 
-          'title': 2, 
-          'authors': 3, 
-          'category': 4, 
-          'description': 5, 
-          'availableCopies': 6
+          '_id': 0
+        }
+      }, {
+        '$lookup': {
+          'from': 'authors', 
+          'localField': 'authors', 
+          'foreignField': '_id', 
+          'as': 'authors'
         }
       }
     ])
